@@ -1,0 +1,10 @@
+--Things to consider / Things to do--
+
+    o Preprocessing: stemming?
+
+    o Preprocessing: Consider links or just remove them?
+
+    o What to do with dashes (Bindestriche)?
+
+    o What to do with brackets? Because just removing 
+        them changes meaning of sentence / context. 
