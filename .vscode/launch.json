@@ -11,7 +11,8 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/information_retrieval/background.js"
+            "program": "${workspaceFolder}/information_retrieval/background.js",
+            "console": "integratedTerminal"
         }
     ]
 }
