@@ -35,7 +35,7 @@ function preprocess(originalString) {
         //.replace(/[^A-Z0-9]/ig, " ")
     });
     return res; */
-    str = str.replace(/\./g, "")
+    str = str.replace(/\./g, "") 
     return str.trim();
 }
 
