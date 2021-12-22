@@ -4,6 +4,8 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+const path = require('path');
+
 // Part 1
 // For part one, we just serve the static files and a dummy endpoint to fetch data
 
@@ -16,6 +18,11 @@ app.use(express.static('static'));
 app.get('/', (req, res) => {
   res.sendFile('static/index.html');
 });
+
+app.get('/test', (req, res) => {
+  res.sendFile(path.resolve(
+    __dirname, 'static/test.json'));
+})
 
 app.get('/q/:qid', (req, res) => {
   res.send('Page for ' + req.params.qid);
