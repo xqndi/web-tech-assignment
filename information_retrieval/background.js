@@ -81,10 +81,10 @@ function createEmbeddings(inputFile, w2v_model, outputFile) {
             let res_arr = preprocess(val["Body"]);
             res_arr = res_arr.split(" ");
             res_arr = [...new Set(res_arr)];
-            // console.log(res_arr);
 
             const vecs = w2v_model.getVectors(res_arr);
-            const doc_vector = vecs[0].values;
+            // .slice() to copy by value!!
+            const doc_vector = vecs[0].values.slice();
     
             vecs.slice(1).forEach(element => {
                 for (let i = 0; i < dimensions; i++) {
@@ -92,7 +92,6 @@ function createEmbeddings(inputFile, w2v_model, outputFile) {
                 }
             });
             const nr_elements = vecs.length;
-            console.log(nr_elements);
             for (let i = 0; i < dimensions; i++) {
                 doc_vector[i] /= nr_elements;
             }
