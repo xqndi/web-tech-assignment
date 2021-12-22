@@ -21,6 +21,7 @@ function preprocess(originalString) {
         .replace(/\n/g, " ")
         // remove links
         .replace(/(http:\/.*? )/g, "")
+        // .replace(/'s/g, " is")
         // remove special characters
         .replace(/[^a-z|0-9|\.]/g, " ")
         // replace whitespace-chains
@@ -112,6 +113,7 @@ function createEmbeddings(inputFile, w2v_model, outputFile) {
 // - create document embeddings
 
 // TODO remove head
+// TODO why create corpus only with answers?
 createCorpus("data/Answers_head.json", 'data/corpus.txt');
 w2v.word2vec("information_retrieval/data/corpus.txt",
  "information_retrieval/data/word_vectors.txt");

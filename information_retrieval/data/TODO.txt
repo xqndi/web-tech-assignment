@@ -1,8 +1,14 @@
 --Things to consider / Things to do--
 
+    o CHECK ALLOWED DEPENDENCIES!! 
+
     o Preprocessing: stemming?
 
     o Preprocessing: Consider links or just remove them?
+
+    o Preprocessing: What to do with dots?
+
+    o <it's> to <it is> but <Wendy's> still <Wendy's> 
 
     o What to do with dashes (Bindestriche)?
 
