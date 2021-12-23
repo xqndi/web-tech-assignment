@@ -38,17 +38,19 @@ app.get('/', (req, res) => {
   res.sendFile('static/index.html');
 });
 
-app.post('/index-search',textParser, (req, res) => {
+app.post('/index-search', textParser, (req, res) => {
+  // todo title and NOT body
   const questionRanking = rankQuestions(req.body);
   res.send(questionRanking);
 });
 
 const data = require(path.resolve(
-  __dirname, 'static/test.json'));
+  __dirname, 'information_retrieval/data/Questions_head.json'));
 
 app.get('/test', (req, res) => {
 
   var ranked_articles = rankArticles(data);
+  console.log(ranked_articles);
 
   res.send(ranked_articles.map(Title =>
     `<a href="http://localhost:3000/redirect_to_question.html">${Title.Title}</a><br>`).join(''));
@@ -139,8 +141,22 @@ function rankQuestions(q) {
   }
 
   // now rank documents against our new query-vector
-  const res = docModel.getNearestWords(doc_vector, 5)
-  console.log(res);
+  const nearestVectors = docModel.getNearestWords(doc_vector, 5)
 
+  const jsonData = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+    "information_retrieval/data/Questions_head.json"
+    )));
+
+
+
+  let res = {};
+  nearestVectors.forEach(jsonElement => {
+    // this is so thrashy
+    res[jsonElement["word"] + "f"] = jsonData[jsonElement["word"]]["Title"];
+  });
+
+
+  console.log(nearestVectors);
+  console.log(res);
   return res;
 }
