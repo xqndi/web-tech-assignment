@@ -120,7 +120,9 @@ w2v.word2vec("information_retrieval/data/corpus.txt",
 
 w2v.loadModel("information_retrieval/data/word_vectors.txt", function( error, model ) {
     createEmbeddings("data/Answers_head.json", model, 
-    "data/entities.txt");
+    "data/answer_entities.txt");
+    createEmbeddings("data/Questions_head.json", model, 
+    "data/question_entities.txt");
 });
 /* createEmbeddings("data/Questions.json", "data/word_vectors.txt",
  "data/entities.txt"); */

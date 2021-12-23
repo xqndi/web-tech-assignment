@@ -20,8 +20,13 @@
 <body>
   <p>yes this is a great index.html file :)</p>
   <script src="js_scripts/index_script.js"></script>
-  <iframe src="http://localhost:3000/test" width="4000" height="4000"></iframe>
 
+  <label for="query-search">eNtEr QuErY:</label>
+  <input type="search" id="query-search" name="q"
+       aria-label="Search for question">
+       <button onclick="processQuery()">Search</button>
+
+  <iframe src="http://localhost:3000/test" width="4000" height="4000"></iframe>
 
 </body>
 </html>

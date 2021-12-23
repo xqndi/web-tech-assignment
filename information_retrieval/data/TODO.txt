@@ -1,5 +1,8 @@
 --Things to consider / Things to do--
 
+    o referencing localhost in index.html
+
+
     o CHECK ALLOWED DEPENDENCIES!! 
 
     o Preprocessing: stemming?
