@@ -8,8 +8,13 @@ const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
 const w2v = require('word2vec');
+const res = require('express/lib/response');
+const { resolve } = require('path');
 
 const textParser = bodyParser.text();
+const jsonParser = bodyParser.json();
+
+let GENERATED_ANSWER_KEY = -1;
 
 // word model for word embeddings 
 // doc model for document embeddings
@@ -42,6 +47,25 @@ app.post('/index-search', textParser, (req, res) => {
   // todo title and NOT body
   const questionRanking = rankQuestions(req.body);
   res.send(questionRanking);
+});
+
+app.post('/question/submit-answer', jsonParser, function (request, response) {
+  const newObj = request.body;
+
+  // TODO parse json-files once and not all the time...
+  let AllAnswersJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+    "information_retrieval/data/Answers_head.json"
+    )));
+
+  AllAnswersJson[GENERATED_ANSWER_KEY] = newObj;
+  GENERATED_ANSWER_KEY--;
+
+  fs.writeFileSync(path.resolve(__dirname,
+    "information_retrieval/data/Answers_head.json"),
+    JSON.stringify(AllAnswersJson));
+
+  // TODO what to send
+  response.send("all good (?)");
 });
 
 const data = require(path.resolve(
