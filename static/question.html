@@ -2,7 +2,8 @@
 
 <html lang="en">
 <head>
-  
+  <base href="/">
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -16,11 +17,13 @@
   <meta property="og:description" content="A simple HTML5 Template for new projects.">
   <meta property="og:image" content="image.png">
 
+  <script src="js_scripts/question_script.js"></script>
 </head>
 
-<body>
-  <p>how do I put the article here? :(</p>
-  <p></p>
-  
+
+<body onload="fetchJson();">
+  <p id="question"></p>
+  <p id="answers"></p>
 </body>
+
 </html>

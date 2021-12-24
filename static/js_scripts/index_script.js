@@ -1,7 +1,5 @@
 function processQuery() {
-    console.log("nice");
     const q = document.getElementById("query-search");
-    console.log(q.value);
 
     if (!q.value) {
         return;
@@ -14,14 +12,18 @@ function processQuery() {
       response.json().then(function(text) {
         let ID_COUNTER = 1;
         for (const [key, val] of Object.entries(text)) {
+          const qid = key.substring(0, key.length - 1);
           let question = document.getElementById(ID_COUNTER.toString());
+
           if (!question) {
-            question = document.createElement("P");
+            question = document.createElement("a");
             question.id = ID_COUNTER.toString();
-            question.innerText = val;
+            question.innerText = val + "\n";
+            question.href = "question/" + qid;
             document.body.appendChild(question);
           } else {
-            question.innerText = val;
+            question.innerText = val + "\n";
+            question.href = "question/" + qid;
           }
 
           ID_COUNTER++;

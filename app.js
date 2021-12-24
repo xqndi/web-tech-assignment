@@ -59,14 +59,42 @@ app.get('/test', (req, res) => {
 
 
 
-app.get('/question', (req, res) => {
-  res.sendFile('/home/oliver/Desktop/web-tech-assignment/static/question.html');
+app.get('/question/:qid', (req, res) => {
+  res.sendFile(__dirname + "/static/question.html");
 })
 
 
 
 app.get('/q/:qid', (req, res) => {
-  res.send('Page for ' + req.params.qid);
+  // res.send('Page for ' + req.params.qid);
+  const questionID = parseInt(req.params.qid);
+  if (!questionID) {
+    res.status(400);
+    res.send("invalid question-id!");
+    return;
+  }
+
+  const questionsJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+    "information_retrieval/data/Questions_head.json"
+    )));
+
+  const answersJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+    "information_retrieval/data/Answers_head.json"
+    )));
+
+    const jsonRes = {};
+
+    // find question
+    const q = questionsJson[questionID];
+    jsonRes[[questionID]] = q;
+
+    // then find its respective answers
+    for (const [key, val] of Object.entries(answersJson)) {
+      if (val["ParentId"] == questionID) {
+        jsonRes[[key]] = val;
+      }
+    }
+    res.json(jsonRes);
 });
 
 // Part 2
@@ -116,7 +144,6 @@ function rankQuestions(q) {
 
   // transform query to document-vector
   let res_arr = q_string.split(" ");
-  console.log(res_arr);
   res_arr = [...new Set(res_arr)];
 
   const dimensions = parseInt(wordModel.size);
@@ -155,8 +182,5 @@ function rankQuestions(q) {
     res[jsonElement["word"] + "f"] = jsonData[jsonElement["word"]]["Title"];
   });
 
-
-  console.log(nearestVectors);
-  console.log(res);
   return res;
 }
