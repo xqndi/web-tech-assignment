@@ -49,6 +49,24 @@ app.post('/index-search', textParser, (req, res) => {
   res.send(questionRanking);
 });
 
+app.get('/question/similar-questions/:qid', textParser, (req, res) => {
+  const questionID = parseInt(req.params.qid);
+  if (!questionID) {
+    res.status(400);
+    res.send("invalid question-id!");
+    return;
+  }
+
+  const currentQuestionVector = docModel.getVector(questionID.toString());
+  const ranking = doSimilaritySearch(currentQuestionVector);
+
+  // the question itself is of course most similar to itself
+  // but we don't want to recommend the same question again
+  // that's why we remove it from here
+  delete ranking[questionID.toString() + "f"]
+  res.send(ranking);
+});
+
 app.post('/question/submit-answer', jsonParser, function (request, response) {
   const newObj = request.body;
 
@@ -74,14 +92,11 @@ const data = require(path.resolve(
 app.get('/test', (req, res) => {
 
   var ranked_articles = rankArticles(data);
-  console.log(ranked_articles);
 
   res.send(ranked_articles.map(Title =>
     `<a href="http://localhost:3000/redirect_to_question.html">${Title.Title}</a><br>`).join(''));
 
 })
-
-
 
 app.get('/question/:qid', (req, res) => {
   res.sendFile(__dirname + "/static/question.html");
@@ -190,15 +205,16 @@ function rankQuestions(q) {
   for (let i = 0; i < dimensions; i++) {
       doc_vector[i] /= nr_elements;
   }
+  return doSimilaritySearch(doc_vector);
+}
 
+function doSimilaritySearch(doc_vector) {
   // now rank documents against our new query-vector
   const nearestVectors = docModel.getNearestWords(doc_vector, 5)
 
   const jsonData = JSON.parse(fs.readFileSync(path.resolve(__dirname,
     "information_retrieval/data/Questions_head.json"
     )));
-
-
 
   let res = {};
   nearestVectors.forEach(jsonElement => {

@@ -8,14 +8,51 @@ function fetchJson() {
     const arr = url.pathname.split("/");
     QID = arr[arr.length - 1];
 
-    const query_string = ("q/" + QID).toString();
+    const elem = document.getElementById("add-answer");
+
+    let query_string = ("q/" + QID).toString();
     fetch(query_string).then(function(response) {
         response.json().then(function(json) {
-            // TOD structure into different text-fields :/
-            const qField = document.getElementById("question");
-            qField.innerHTML = JSON.stringify(json, null, 2);
+            let isQuestion = true;
+            for (const [k, v] of Object.entries(json)) {
+                const field = document.createElement("p");
+                field.innerHTML = JSON.stringify({[k]: v}, null, 2) + "\n\n";
+                document.body.appendChild(field);
+                // very inefficient...     
+                elem.before(field);
+                if (isQuestion) {
+                    const answersHeader = document.getElementById("answers-h2");
+                    answersHeader.before(field);
+                    isQuestion = false;
+                }
+            }
         })
      });
+
+     query_string = ("question/similar-questions/" + QID).toString();
+     fetch(query_string).then(function(response) {
+        response.json().then(function(text) {
+            let ID_COUNTER = 1;
+            for (const [key, val] of Object.entries(text)) {
+              const qid = key.substring(0, key.length - 1);
+              let question = document.getElementById(ID_COUNTER.toString());
+    
+              if (!question) {
+                question = document.createElement("a");
+                question.id = ID_COUNTER.toString();
+                question.innerText = val + "\n";
+                question.href = "question/" + qid;
+                document.body.appendChild(question);
+              } else {
+                question.innerText = val + "\n";
+                question.href = "question/" + qid;
+              }
+    
+              ID_COUNTER++;
+            }
+        })
+     });
+
 }
 
 function submitAnswer() {
@@ -34,9 +71,6 @@ function submitAnswer() {
     newAnswerJson["Score"] = -1;
     newAnswerJson["Body"] = answer.value;
 
-    console.log(newAnswerJson);
-
-
     fetch("question/submit-answer", {
         method: 'POST',
         headers: {
@@ -45,5 +79,6 @@ function submitAnswer() {
         body: JSON.stringify(newAnswerJson)
     }).then(function(response) {
         console.log("done");
+        document.location.reload();
     });
 }
