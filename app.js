@@ -9,12 +9,11 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const w2v = require('word2vec');
 const res = require('express/lib/response');
+const uuidv4 = require("uuid/v4");
 const { resolve } = require('path');
 
 const textParser = bodyParser.text();
 const jsonParser = bodyParser.json();
-
-let GENERATED_ANSWER_KEY = -1;
 
 // word model for word embeddings 
 // doc model for document embeddings
@@ -50,7 +49,7 @@ app.post('/index-search', textParser, (req, res) => {
 });
 
 app.get('/question/similar-questions/:qid', textParser, (req, res) => {
-  const questionID = parseInt(req.params.qid);
+  const questionID = req.params.qid;
   if (!questionID) {
     res.status(400);
     res.send("invalid question-id!");
@@ -67,6 +66,12 @@ app.get('/question/similar-questions/:qid', textParser, (req, res) => {
   res.send(ranking);
 });
 
+// TODO right path
+// TODO change to <POST/GET>
+app.get('/new', (req, res) => {
+  res.sendFile(__dirname + '/static/new.html');
+});
+
 app.post('/question/submit-answer', jsonParser, function (request, response) {
   const newObj = request.body;
 
@@ -75,8 +80,8 @@ app.post('/question/submit-answer', jsonParser, function (request, response) {
     "information_retrieval/data/Answers_head.json"
     )));
 
-  AllAnswersJson[GENERATED_ANSWER_KEY] = newObj;
-  GENERATED_ANSWER_KEY--;
+  // generate (unique) key for new Answers / Questions
+  AllAnswersJson[uuidv4()] = newObj;
 
   fs.writeFileSync(path.resolve(__dirname,
     "information_retrieval/data/Answers_head.json"),
@@ -85,6 +90,58 @@ app.post('/question/submit-answer', jsonParser, function (request, response) {
   // TODO what to send
   response.send("all good (?)");
 });
+
+app.post('/question/submit-question', jsonParser, function (request, response) {
+  const newObj = request.body;
+
+  // create w2v-representation for our new question-doc
+  const qVector = createW2vForNewQuestion(newObj["Body"]);
+  // TODO good handling
+  if (!qVector) {
+    response.send("couldn't create vector for question...");
+    return;
+  }
+
+  // TODO parse json-files once and not all the time...
+  let allQuestionsJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+    "information_retrieval/data/Questions_head.json"
+    )));
+
+  const generatedKey = uuidv4();
+  // generate (unique) key for new Answers / Questions
+  allQuestionsJson[generatedKey] = newObj;
+
+  fs.writeFileSync(path.resolve(__dirname,
+    "information_retrieval/data/Questions_head.json"),
+    JSON.stringify(allQuestionsJson));
+
+  let fileData = fs.readFileSync(path.resolve(__dirname,
+    "information_retrieval/data/question_entities.txt"),
+    {encoding: 'utf8', flag: 'r'}
+    );
+  let fileLines = fileData.split("\n");
+  let nrLines = parseInt(fileLines[0].split(" ")[0]) + 1;
+  console.log(nrLines);
+  fileData = fileData.replace(/.+(?= )/, nrLines.toString());
+
+  fileData += 
+    generatedKey.toString() + " " + 
+    qVector.toString().replace(/,/g, " ") +
+    "\n";
+    
+  fs.writeFileSync(path.resolve(__dirname,
+    "information_retrieval/data/question_entities.txt"),
+    fileData);
+
+  // TODO this seems very stupid
+  w2v.loadModel("information_retrieval/data/question_entities.txt", function( error, model ) {
+    docModel = model;
+    // TODO what to send
+    response.send("all goody");
+    return;
+  });
+});
+
 
 const data = require(path.resolve(
   __dirname, 'information_retrieval/data/Questions_head.json'));
@@ -106,7 +163,7 @@ app.get('/question/:qid', (req, res) => {
 
 app.get('/q/:qid', (req, res) => {
   // res.send('Page for ' + req.params.qid);
-  const questionID = parseInt(req.params.qid);
+  const questionID = req.params.qid;
   if (!questionID) {
     res.status(400);
     res.send("invalid question-id!");
@@ -179,6 +236,11 @@ function preprocess(originalString) {
 }
 
 function rankQuestions(q) {
+  const doc_vector = createW2vForNewQuestion(q);
+  return doSimilaritySearch(doc_vector);
+}
+
+function createW2vForNewQuestion(q) {
   const q_string = preprocess(q);
 
   // transform query to document-vector
@@ -205,7 +267,7 @@ function rankQuestions(q) {
   for (let i = 0; i < dimensions; i++) {
       doc_vector[i] /= nr_elements;
   }
-  return doSimilaritySearch(doc_vector);
+  return doc_vector;
 }
 
 function doSimilaritySearch(doc_vector) {

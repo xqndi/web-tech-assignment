@@ -1,3 +1,4 @@
+
 let QID = "-2";
 
 function fetchJson() {
@@ -11,6 +12,7 @@ function fetchJson() {
     const elem = document.getElementById("add-answer");
 
     let query_string = ("q/" + QID).toString();
+    console.log(query_string);
     fetch(query_string).then(function(response) {
         response.json().then(function(json) {
             let isQuestion = true;
@@ -61,14 +63,18 @@ function submitAnswer() {
         return;
     }
 
-    // TODO extract userID, date, score, etc...
-    // TODO find efficient way to generate new key
+    // https://tecadmin.net/get-current-date-time-javascript/
+    const today = new Date();
+    const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    const dateTime = date+"T"+time+"Z";
 
+    // TODO extract userID, etc...
     let newAnswerJson = {};
     newAnswerJson["OwnerUserId"] = -1;
-    newAnswerJson["CreationDate"] = -1;
+    newAnswerJson["CreationDate"] = dateTime;
     newAnswerJson["ParentId"] = QID;
-    newAnswerJson["Score"] = -1;
+    newAnswerJson["Score"] = 0;
     newAnswerJson["Body"] = answer.value;
 
     fetch("question/submit-answer", {
