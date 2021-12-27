@@ -27,7 +27,10 @@ function createNewQuestion() {
             'Content-Type': 'application/json'},
         body: JSON.stringify(newQuestionJson)
     }).then(function(response) {
-        console.log("done");
-        document.location.reload();
+        response.text().then(function(text) {
+        // todo this is not speficied anywhere
+        // redirct to question-page of the new question
+        location.href = "/question/" + text;
+        });
     });
 }

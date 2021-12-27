@@ -2,6 +2,7 @@
 
     o referencing localhost in index.html
 
+    o server-side error handling !!
 
     o CHECK ALLOWED DEPENDENCIES!! 
 

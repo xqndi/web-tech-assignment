@@ -72,6 +72,11 @@ app.get('/new', (req, res) => {
   res.sendFile(__dirname + '/static/new.html');
 });
 
+// TODO right path
+app.get('/about', (req, res) => {
+  res.sendFile(__dirname + '/static/about.html');
+});
+
 app.post('/question/submit-answer', jsonParser, function (request, response) {
   const newObj = request.body;
 
@@ -137,7 +142,7 @@ app.post('/question/submit-question', jsonParser, function (request, response) {
   w2v.loadModel("information_retrieval/data/question_entities.txt", function( error, model ) {
     docModel = model;
     // TODO what to send
-    response.send("all goody");
+    response.send(generatedKey);
     return;
   });
 });
@@ -203,6 +208,13 @@ app.get('/search', (req, res) => {
 app.get('/sim/:qid', (req, res) => {
   res.send('API for ' + req.params.qid);
 });
+
+// handling of missing sites
+// TODO which way
+app.get("/*", function (req, res, next) {
+  // res.status(404).send('The requested resource/page was not found');
+  res.sendFile(__dirname + '/static/404.html');
+})
 
 function rankArticles(inputFile) {
   //const json_data = JSON.parse(inputFile);
