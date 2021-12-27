@@ -15,6 +15,9 @@ const { resolve } = require('path');
 const textParser = bodyParser.text();
 const jsonParser = bodyParser.json();
 
+const QUESTION = "QUESTION";
+const ANSWER = "ANSWER";
+
 // word model for word embeddings 
 // doc model for document embeddings
 let wordModel, docModel;
@@ -46,6 +49,43 @@ app.post('/index-search', textParser, (req, res) => {
   // todo title and NOT body
   const questionRanking = rankQuestions(req.body);
   res.send(questionRanking);
+});
+
+app.post('/like-by-id', textParser, (req, res) => {
+  // TODO error handling
+  const arr = req.body.toString().split(",");
+  const id = arr[0];
+  const type = arr[1];
+  if (!id || !type) {
+    res.status(400);
+    res.send("invalid id!");
+    return;
+  }
+
+  let fileDataJson;
+  if (type === QUESTION) {
+    fileDataJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+      "information_retrieval/data/Questions_head.json"
+      )));
+  } else if (type === ANSWER) {
+    fileDataJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+      "information_retrieval/data/Answers_head.json"
+      )));
+  } else { res.status(400).send("invalid type?"); return; }
+
+  fileDataJson[id]["Score"] = fileDataJson[id]["Score"] + 1;
+
+  if (type === QUESTION) {
+    fs.writeFileSync(path.resolve(__dirname,
+      "information_retrieval/data/Questions_head.json"),
+      JSON.stringify(fileDataJson));
+  } else if (type === ANSWER) {
+    fs.writeFileSync(path.resolve(__dirname,
+      "information_retrieval/data/Answers_head.json"),
+      JSON.stringify(fileDataJson));
+  }
+
+  res.send("heya");
 });
 
 app.get('/question/similar-questions/:qid', textParser, (req, res) => {
