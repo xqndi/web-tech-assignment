@@ -1,7 +1,11 @@
+const { response } = require("express");
+
 function processQuery() {
+    hideArticles();
     const q = document.getElementById("query-search");
 
     if (!q.value) {
+        displayArticles();
         return;
     }
 
@@ -30,5 +34,43 @@ function processQuery() {
         }
       });
      });
-
 }
+
+function hideArticles() {
+  fetch("popular-articles", {
+    method: "GET"
+  }).then(function(response) {
+    response.json().then(function(text) {
+      let ID_COUNTER = 1;
+      for (const el of text)
+      {
+        let question = document.getElementById(ID_COUNTER.toString());
+        question.remove();
+        ID_COUNTER++;
+      }
+    })
+  })
+}
+
+
+function displayArticles() {
+  fetch("popular-articles", {
+    method: "GET"
+  }).then(function(response) {
+    response.json().then(function(text) {
+      let ID_COUNTER = 1;
+      for (const el of text)
+      {
+        let question = document.getElementById(ID_COUNTER.toString());
+
+        question = document.createElement("a");
+        question.id = ID_COUNTER.toString();
+        question.innerText = el.Title + "\n";
+        question.href = "question/" + el.Key;
+        document.body.appendChild(question);
+        ID_COUNTER++;
+      }
+    })
+  })
+}
+

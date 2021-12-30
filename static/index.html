@@ -18,16 +18,16 @@
   <script src="js_scripts/index_script.js"></script>
 </head>
 
-<body>
+<body button onload="displayArticles()">
   <p>yes this is a great index.html file :)</p>
 
-  <iframe src="http://localhost:3000/test" width="400" height="200"></iframe>
+  <!-- <iframe src="http://localhost:3000/test" width="400" height="200"></iframe>-->
 
   <br>
 
   <label for="query-search">eNtEr QuErY:</label>
   <input type="search" id="query-search" name="q"
-       aria-label="Search for question">
+       aria-label="Search for question" oninput="processQuery()">
        <button onclick="processQuery()">Search</button>
   <br>
 

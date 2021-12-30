@@ -191,12 +191,18 @@ app.post('/question/submit-question', jsonParser, function (request, response) {
 const data = require(path.resolve(
   __dirname, 'information_retrieval/data/Questions_head.json'));
 
-app.get('/test', (req, res) => {
+app.get('/popular-articles', (req, res) => {
 
   var ranked_articles = rankArticles(data);
 
-  res.send(ranked_articles.map(Title =>
-    `<a href="http://localhost:3000/redirect_to_question.html">${Title.Title}</a><br>`).join(''));
+  //console.log(JSON.stringify(ranked_articles.map(Title => Title.Title)));
+
+  //console.log(JSON.stringify(ranked_articles));
+
+  res.send(JSON.stringify(ranked_articles));
+
+  // res.send(ranked_articles.map(Title =>
+  //   `<a href="http://localhost:3000/redirect_to_question.html">${Title.Title}</a><br>`).join(''));
 
 })
 
@@ -218,6 +224,7 @@ app.get('/q/:qid', (req, res) => {
   const questionsJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
     "information_retrieval/data/Questions_head.json"
     )));
+
 
   const answersJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
     "information_retrieval/data/Answers_head.json"
@@ -258,10 +265,25 @@ app.get("/*", function (req, res, next) {
 
 function rankArticles(inputFile) {
   //const json_data = JSON.parse(inputFile);
-  var sorted_list = Object.keys(inputFile).map(key => inputFile[key]);
+
+  //var sorted_list = Object.JSON(JSON.stringify(inputFile)).map(key => inputFile[key]);
   
-  sorted_list.sort((a, b) => (a.Score < b.Score) ? 1 : -1);
-  return sorted_list;
+  //var sorted_list = Object.keys(inputFile).sort((a, b) => (a.Score < b.Score) ? 1 : -1);
+  //var sorted_list = Object.entries(inputFile).sort((a, b) => (a.Score < b.Score) ? 1 : -1);
+
+  var sorted_list = Object.entries(inputFile);
+  var key_val_pair = [];
+  
+  for(const [key, val] of sorted_list)
+  {
+    key_val_pair.push({Key: key, Score: val.Score, Title: val.Title});
+  }
+
+  key_val_pair.sort((a, b) => (a.Score < b.Score) ? 1 : -1);
+
+
+  //sorted_list.sort((a, b) => (a.Score < b.Score) ? 1 : -1);
+  return key_val_pair;
 }
 
 function preprocess(originalString) {
