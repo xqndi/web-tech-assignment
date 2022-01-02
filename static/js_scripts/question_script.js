@@ -87,6 +87,19 @@ async function fetchJson() {
 }
 
 function submitAnswer() {
+
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+
+    const arr = url.pathname.split("/");
+    UID = arr[arr.length - 3];
+
+    if (UID == "")
+    {
+        return;
+    }
+
+
     const answer = document.getElementById("add-answer")
     if (!answer.value) {
         return;
@@ -120,6 +133,17 @@ function submitAnswer() {
 
 function likeElementById() {
     // not quite sure whether this always works :)
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+
+    const arr = url.pathname.split("/");
+    UID = arr[arr.length - 3];
+
+    if (UID == "")
+    {
+        return;
+    }
+    
     console.log(this.value);
 
     fetch("like-by-id", {

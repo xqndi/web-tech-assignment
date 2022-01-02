@@ -206,9 +206,14 @@ app.get('/popular-articles', (req, res) => {
 
 })
 
+app.get('/:uid/question/:qid', (req, res) => {
+  res.sendFile(__dirname + "/static/question.html");
+})
 app.get('/question/:qid', (req, res) => {
   res.sendFile(__dirname + "/static/question.html");
 })
+
+
 
 
 
@@ -255,6 +260,65 @@ app.get('/search', (req, res) => {
 app.get('/sim/:qid', (req, res) => {
   res.send('API for ' + req.params.qid);
 });
+
+app.get('/register', (req, res) => {
+  res.sendFile(__dirname + '/static/register.html')
+})
+
+app.post('/register/new-user', jsonParser, function (request, response) {
+  const newObj = request.body;
+
+  let AllUsersJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+    "information_retrieval/data/Users.json")));
+
+  var searchlist = Object.values(AllUsersJson);
+  for(var el of searchlist)
+  {
+    if (el.UserEmail == newObj.UserEmail)
+    {
+      response.send("there is already an account registered with this email!");
+      return;
+    }
+  }
+
+  AllUsersJson[uuidv4()] = newObj;
+
+  fs.writeFileSync(path.resolve(__dirname,
+    "information_retrieval/data/Users.json"),
+    JSON.stringify(AllUsersJson));
+  
+  response.send("new user registered successfully!");
+});
+
+
+
+app.get('/login', (req, res) => {
+  res.sendFile(__dirname + '/static/login.html');
+})
+
+app.post('/login/user', jsonParser, function (request, response) {
+  const newObj = request.body;
+
+  let AllUsersJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+    "information_retrieval/data/Users.json")));
+
+  var searchlist = Object.values(AllUsersJson);
+  for(var el of searchlist)
+  {
+    if ((el.UserName == newObj.UserName) && (el.UserPassword == el.UserPassword))
+    {
+      console.log("Turtle");
+      response.send("Successfully logged in!");
+      return;
+    }
+  }
+  
+  response.send("Wrong password or username!");
+});
+
+app.get('/:user', (req, res) => {
+  res.sendFile(__dirname + "/static/index.html")
+})
 
 // handling of missing sites
 // TODO which way

@@ -1,5 +1,16 @@
 function createNewQuestion() {
     console.log("yea");
+    
+
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+
+    // kinda dirty...
+    const arr = url.pathname.split("/");
+    UID = arr[arr.length - 1];
+
+    console.log(UID);
+
     const title = document.getElementById("title-input")
     const body = document.getElementById("q-body-input")
     if (!title.value || !body.value) {

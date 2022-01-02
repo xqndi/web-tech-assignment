@@ -23,7 +23,7 @@ function processQuery() {
             question = document.createElement("a");
             question.id = ID_COUNTER.toString();
             question.innerText = val + "\n";
-            question.href = "question/" + qid;
+            question.href = UID + "/question/" + qid;
             document.body.appendChild(question);
           } else {
             question.innerText = val + "\n";
@@ -54,6 +54,19 @@ function hideArticles() {
 
 
 function displayArticles() {
+  var url_string = window.location.href;
+  var url = new URL(url_string);
+
+    // kinda dirty...
+  const arr = url.pathname.split("/");
+  UID = arr[arr.length - 1];
+    
+  if (UID != "")
+  {
+    var section = document.getElementById("login/register");
+    section.innerHTML = "User: " + UID;
+  }
+
   fetch("popular-articles", {
     method: "GET"
   }).then(function(response) {
@@ -66,11 +79,15 @@ function displayArticles() {
         question = document.createElement("a");
         question.id = ID_COUNTER.toString();
         question.innerText = el.Title + "\n";
-        question.href = "question/" + el.Key;
+        question.href = UID + "/question/" + el.Key;
         document.body.appendChild(question);
         ID_COUNTER++;
       }
     })
   })
+}
+
+function registerNewUser() {
+  
 }
 
