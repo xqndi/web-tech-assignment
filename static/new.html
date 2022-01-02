@@ -18,20 +18,33 @@
   <meta property="og:image" content="image.png">
 
   <script src="js_scripts/new_script.js"></script>
+  <link rel="stylesheet" href="new.css">
+  <link rel="stylesheet" href="headertabs.css">
+  <link rel="stylesheet" href="footer.css">
 </head>
 
 <body>
-  <h1>hey lil bitch ask a new question</h1>
+<section id="headertabs">
+  <a  href="http://localhost:3000/"><button class="tabs" id="home">Home</button></a>
+  <a  href="new"><button class="tabs" id="question">Question</button></a>
+  <a  href="login"><button class="tabs" id="login">Login</button></a>
+  <a  href="register"><button class="tabs" id="register">Register</button></a>
+  <input type="search" id="header_search" placeholder="Search...">
+</section>
 
-  <form>
-    <label for="title">Give your question a title:</label><br>
-    <input type="text" id="title-input" name="title"><br>
-    <label for="q-body">What is it you wanna know?</label><br>
-    <input type="text" id="q-body-input" name="q-body">
-    <br>
-    <button onclick="createNewQuestion(); return false">Ask!</button>
-  </form>
+<h1 id="new_question">Ask a new question</h1>
 
+<form class="form_new_question">
+  <label for="title">Give your question a title:</label><br>
+  <input type="text" id="title-input" name="title" placeholder="e.g. Why don't I have any friends?" ><br>
+  <label for="q-body">What is it you wanna know?</label><br>
+  <input type="text" id="q-body-input" name="q-body" placeholder="e.g How do I get friends fast?">
+  <br>
+  <button id="question_ASK" onclick="createNewQuestion(); return false"><b>ASK</b></button>
+</form>
+<div class="footer">
+  <a  href="about"><button class="footerclass" id="aboutus">About us</button></a>
+</div>
 </body>
 
 </html>

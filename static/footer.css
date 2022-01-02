@@ -1,0 +1,21 @@
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+    color: white;
+    text-align: center;
+
+}
+#aboutus{
+    color: white;
+    border: none;
+    width: 20%;
+    cursor: pointer;
+    background-color: #00B7FF;
+    padding-top: 10px;
+    font-size: 30px;
+    padding-bottom: 30px;
+    border-radius: 20px 20px 0 0;
+}

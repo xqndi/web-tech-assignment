@@ -16,20 +16,32 @@
   <meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">
   <meta property="og:description" content="A simple HTML5 Template for new projects.">
   <meta property="og:image" content="image.png">
+  <link rel="stylesheet" href="headertabs.css">
+  <link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="footer.css">
 
   <script src="js_scripts/login_user.js"></script>
 </head>
 
 <body>
-  <h1>Register</h1>
+<section id="headertabs">
+  <a  href="http://localhost:3000/"><button class="tabs" id="home">Home</button></a>
+  <a  href="new"><button class="tabs" id="question">Question</button></a>
+  <a  href="login"><button class="tabs" id="login">Login</button></a>
+  <a  href="register"><button class="tabs" id="register">Register</button></a>
+  <input type="search" id="header_search" placeholder="Search...">
+</section>
+  <h1 id="login_header">Login</h1>
 
   <form>
-    <input type="username" id="usr" name="user-inputfield" placeholder="Username"><br>
-    <input type="password" id="pass_in" name="password-inputfield" placeholder="Password"><br>
+    <input class="loginfield" type="username" id="usr" name="user-inputfield" placeholder="Username"><br>
+    <input class="loginfield" type="password" id="pass_in" name="password-inputfield" placeholder="Password"><br>
     <br>
-    <button onclick="loginUser(); return false">Login</button>
+    <button id="login_button" onclick="loginUser(); return false">Login</button>
   </form>
-
+<div class="footer">
+  <a  href="about"><button class="footerclass" id="aboutus">About us</button></a>
+</div>
 </body>
 
 </html>

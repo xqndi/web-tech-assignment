@@ -80,6 +80,7 @@ function displayArticles() {
         question.id = ID_COUNTER.toString();
         question.innerText = el.Title + "\n";
         question.href = UID + "/question/" + el.Key;
+        question.className = "questions";
         document.body.appendChild(question);
         ID_COUNTER++;
       }

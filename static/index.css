@@ -1,0 +1,48 @@
+#WebsiteHeader{
+    font-family: Inconsolata, sans-serif;
+    color: darkblue;
+}
+#query-searchfield{
+    background-image: url("images/Magnifying_glass.png");
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: 4px 4px;
+    border-radius: 8px;
+    padding-left: 30px;
+    width:187px;
+    height:30px;
+    border-color: darkgrey;
+}
+
+#searchbutton{
+    color: white;
+    border: none;
+    width: 5%;
+    font-weight: bold;
+    cursor: pointer;
+    height: 30px;
+    background-color: #00B7FF;
+    border-radius: 3px;
+}
+
+#query-search{
+    display: flex;
+    flex-direction: column-reverse;
+}
+#query-search-button{
+    position:absolute;
+    width:25px;
+    height:25px;
+    left:180px;
+}
+
+.questions{
+    font-family: "Abyssinica SIL", serif;
+    color: black;
+    text-decoration: none;
+    list-style-position:inside;
+    display: list-item;
+    list-style-type: disc;
+    list-style-position: inside;
+    width: 600px;
+}

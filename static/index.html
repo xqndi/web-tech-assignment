@@ -14,31 +14,35 @@
   <meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">
   <meta property="og:description" content="A simple HTML5 Template for new projects.">
   <meta property="og:image" content="image.png">
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="headertabs.css">
+  <link rel="stylesheet" href="footer.css">
 
   <script src="js_scripts/index_script.js"></script>
 </head>
 
 <body button onload="displayArticles()">
-  <p>yes this is a great index.html file :)</p>
+<section id="headertabs">
+  <a  href="http://localhost:3000/"><button class="tabs" id="home">Home</button></a>
+  <a  href="new"><button class="tabs" id="question">Question</button></a>
+  <a  href="login"><button class="tabs" id="login">Login</button></a>
+  <a  href="register"><button class="tabs" id="register">Register</button></a>
+  <input type="search" id="header_search" placeholder="Search...">
+</section>
+  <h1 id="WebsiteHeader">Task Web App</h1>
+
 
   <!-- <iframe src="http://localhost:3000/test" width="400" height="200"></iframe>-->
+  <!-- <label for="query-search">eNtEr QuErY:</label> -->
+  <div class="query-search">
+      <input type="search" id="query-searchfield" name="q" aria-label="Search for question" placeholder="Search for an article" oninput="processQuery()">
+      <button id="searchbutton" onclick="processQuery()">Search</button>
+  </div>
+  <h2 id="header-articles">Popular articles</h2>
+<div class="footer">
+    <a  href="about"><button class="footerclass" id="aboutus">About us</button></a>
+</div>
 
-  <br>
-
-  <label for="query-search">eNtEr QuErY:</label>
-  <input type="search" id="query-search" name="q"
-       aria-label="Search for question" oninput="processQuery()">
-       <button onclick="processQuery()">Search</button>
-       
-       <section id="login/register">
-        <a href="login">
-          <button onclick=>login</button>
-          </a>
-        <a href="register">
-        <button onclick=>register</button>
-        </a>
-       </section>
-  <br>
 
 </body>
 </html>

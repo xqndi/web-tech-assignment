@@ -1,0 +1,32 @@
+.tabs{
+    background-color: #00B7FF;
+    border: none;
+    float:left;
+    outline:none;
+    cursor: pointer;
+    font-size: 20px;
+    width:150px;
+    top: 3px;
+}
+
+button#register.tabs{
+    border-radius: 0 10px 10px 0 ;
+}
+button#home.tabs{
+    border-radius: 10px 0 0 10px ;
+}
+.tabs:hover{
+    background-color: slategrey;
+}
+
+#header_search{
+    background-image: url("images/Magnifying_glass.png");
+    background-size:18px;
+    background-repeat: no-repeat;
+    background-position: 1px 1px;
+    border-radius: 7px;
+    height: 25px;
+    width: 200px;
+    padding-left: 25px;
+    margin-left: 5px;
+}

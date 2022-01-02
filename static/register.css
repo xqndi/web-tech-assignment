@@ -1,0 +1,26 @@
+.registerfield {
+    width: 200px;
+    height:40px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: 1px solid lightgrey;
+    box-shadow: none;
+    display: inline-block;
+    padding-left: 12px;
+}
+
+input:focus {
+    outline: none;
+    border: 1px solid #00B7FF;
+}
+
+#register_button{
+    color: white;
+    border: none;
+    width: 5%;
+    font-weight: bold;
+    cursor: pointer;
+    height: 30px;
+    background-color: #00B7FF;
+    border-radius: 3px;
+}

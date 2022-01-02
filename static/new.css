@@ -1,0 +1,23 @@
+input[type=text], select{
+    width: 30%;
+    padding: 12px 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid lightgrey;
+    border-radius: 6px;
+}
+#question_ASK{
+    color: white;
+    border: none;
+    width: 5%;
+    height: 30px;
+    cursor: pointer;
+    margin: 8px 0;
+    background-color: #00B7FF;
+    border-radius: 3px;
+}
+
+input:focus {
+    outline: none;
+    border: 1px solid #00B7FF;
+}

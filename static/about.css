@@ -1,0 +1,19 @@
+body{
+    background: url("images/naruto.jpg");
+    background-size: 100%;
+    background-color: rgba(255,255,255,0.9);
+    background-blend-mode: lighten;
+}
+
+#about_header{
+    position: relative;
+    top: -80px;
+    font-family: Ani, sans-serif;
+    font-size: 100px;
+}
+#people{
+    position: relative;
+    top: -200px;
+    font-family: Chilanka, sans-serif;
+    left: 20px;
+}

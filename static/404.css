@@ -1,0 +1,17 @@
+#title{
+    font-family: "Fira Code", sans-serif;
+    position: relative;
+    top: 200px;
+    left: 100px;
+}
+#qmimage {
+    display:block;
+    width: auto;
+    height: auto;
+    max-width: 400px;
+    max-height: 200px;
+    position: relative;
+    left: 700px;
+    top: 30px;
+}
+
