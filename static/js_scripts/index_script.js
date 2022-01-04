@@ -1,11 +1,11 @@
-const { response } = require("express");
-
 function processQuery() {
-    hideArticles();
+    hideMostPopular();
+    hideMostSimilar();
     const q = document.getElementById("query-search");
 
     if (!q.value) {
-        displayArticles();
+        hideMostSimilar();
+        displayMostPopular();
         return;
     }
 
@@ -14,75 +14,75 @@ function processQuery() {
         body: q.value
     }).then(function(response) {
       response.json().then(function(text) {
-        let ID_COUNTER = 1;
+        const article = document.getElementById("similar-questions-article");
+        document.getElementById("similar-questions-header").style.display = "Block";
         for (const [key, val] of Object.entries(text)) {
           const qid = key.substring(0, key.length - 1);
-          let question = document.getElementById(ID_COUNTER.toString());
-
-          if (!question) {
-            question = document.createElement("a");
-            question.id = ID_COUNTER.toString();
-            question.innerText = val + "\n";
-            question.href = UID + "/question/" + qid;
-            document.body.appendChild(question);
-          } else {
-            question.innerText = val + "\n";
-            question.href = "question/" + qid;
-          }
-
-          ID_COUNTER++;
+          question = document.createElement("a");
+          question.innerText = val + "\n";
+          // TODO where does UID come from??
+          question.href = "/question/" + qid;
+          article.appendChild(question);
         }
       });
      });
 }
 
-function hideArticles() {
-  fetch("popular-articles", {
-    method: "GET"
-  }).then(function(response) {
-    response.json().then(function(text) {
-      let ID_COUNTER = 1;
-      for (const el of text)
-      {
-        let question = document.getElementById(ID_COUNTER.toString());
-        question.remove();
-        ID_COUNTER++;
-      }
-    })
-  })
+function hideMostSimilar() {
+  let links = document.getElementById("similar-questions-article").getElementsByTagName("a");
+  Array.from(links).forEach(element => {
+    element.remove();
+  });
+  let headers = document.getElementById("similar-questions-article").getElementsByTagName("h2");
+  Array.from(headers).forEach(element => {
+    element.style.display = "none";
+  });
+}
+
+function hideMostPopular() {
+  let links = document.getElementById("popular-questions-article").getElementsByTagName("a");
+  Array.from(links).forEach(element => {
+    element.remove();
+  });
+  let headers = document.getElementById("popular-questions-article").getElementsByTagName("h2");
+  Array.from(headers).forEach(element => {
+    element.style.display = "none";
+  });
 }
 
 
-function displayArticles() {
+function displayMostPopular() {
+  document.getElementById("similar-questions-header").style.display = "None";
+  document.getElementById("popular-questions-header").style.display = "Block";
   var url_string = window.location.href;
   var url = new URL(url_string);
 
     // kinda dirty...
   const arr = url.pathname.split("/");
-  UID = arr[arr.length - 1];
-    
-  if (UID != "")
+
+  const logged = localStorage.getItem('token');
+  if (logged)
   {
-    var section = document.getElementById("login/register");
-    section.innerHTML = "User: " + UID;
+    var section_log = document.getElementById("login");
+    var section_reg = document.getElementById("register");
+    section_log.innerHTML = "<b>User: " + logged + "</b>";
+    section_log.disabled = true;
+    section_reg.style.display = "none";
   }
+
 
   fetch("popular-articles", {
     method: "GET"
   }).then(function(response) {
     response.json().then(function(text) {
-      let ID_COUNTER = 1;
+      const article = document.getElementById("popular-questions-article");
       for (const el of text)
       {
-        let question = document.getElementById(ID_COUNTER.toString());
-
         question = document.createElement("a");
-        question.id = ID_COUNTER.toString();
         question.innerText = el.Title + "\n";
-        question.href = UID + "/question/" + el.Key;
+        question.href = "/question/" + el.Key;
         question.className = "questions";
-        document.body.appendChild(question);
-        ID_COUNTER++;
+        article.appendChild(question);
       }
     })
   })

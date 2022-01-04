@@ -1,5 +1,11 @@
 function createNewQuestion() {
     console.log("yea");
+
+    const logged = localStorage.getItem('token');
+    if (!logged)
+    {
+        return false;
+    }
     
 
     var url_string = window.location.href;

@@ -23,21 +23,26 @@ async function fetchJson() {
                 field.id = k;
                 field.innerHTML = JSON.stringify({[k]: v}, null, 2) + "\n\n";
                 document.body.appendChild(field);
-
-                const btn = document.createElement("button");
-                btn.innerHTML = "like";
-                if (isQuestion) { btn.value = [k, "QUESTION"]; }
-                else { btn.value = [k, "ANSWER"]; }
-                btn.addEventListener("click", likeElementById);
-                document.body.appendChild(btn);
-
+                const logged = localStorage.getItem('token');
+                if (logged)
+                {
+                    const btn = document.createElement("button");
+                    btn.innerHTML = "like";
+                
+                
+                    if (isQuestion) { btn.value = [k, "QUESTION"]; }
+                    else { btn.value = [k, "ANSWER"]; }
+                    btn.addEventListener("click", likeElementById);
+                    document.body.appendChild(btn);
+                    btn.before(field);
+                }
                 if (isQuestion) {
                     const a_header = document.createElement("h2");
                     a_header.innerText = "Answers:";
                     document.body.appendChild(a_header);
                     isQuestion = false;
                 }
-                btn.before(field);
+                
             }
 
             const own_answer_header = document.createElement("h3");
@@ -90,9 +95,11 @@ function submitAnswer() {
 
 
     const logged = localStorage.getItem('token');
-    console.log(logged);
     if (!logged)
     {
+        var input_field = document.getElementById("add-answer")
+        input_field.style.color = "red";
+        input_field.value = "Log in before posting an answer!";
         return false;
     }
 
@@ -132,16 +139,8 @@ function submitAnswer() {
 function likeElementById() {
     // not quite sure whether this always works :)
     
-    // const username = localStorage.get('token');
-    // if (!username)
-    // {
-    //     return false;
-    // }
-
-
 
     const logged = localStorage.getItem('token');
-    console.log(logged);
     if (!logged)
     {
         return false;

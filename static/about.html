@@ -14,12 +14,13 @@
   <meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">
   <meta property="og:description" content="A simple HTML5 Template for new projects.">
   <meta property="og:image" content="image.png">
+  <script src="js_scripts/login_user.js"></script>
   <link rel="stylesheet" href="about.css">
   <link rel="stylesheet" href="headertabs.css">
   <link rel="stylesheet" href="footer.css">
 </head>
 
-<body>
+<body button onload="changeLoggedHeader()">
 <section id="headertabs">
   <a  href="http://localhost:3000/"><button class="tabs" id="home">Home</button></a>
   <a  href="new"><button class="tabs" id="question">Question</button></a>

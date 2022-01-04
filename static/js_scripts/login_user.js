@@ -25,6 +25,7 @@ function loginUser()
             hideChildren()
             prompt.innerText = text;
             document.body.appendChild(prompt);
+            
             if (text == "Successfully logged in!")
             {
                 localStorage.setItem('token', username.value);
@@ -32,6 +33,19 @@ function loginUser()
             }
         });
     });
+}
+
+function changeLoggedHeader()
+{
+    const logged = localStorage.getItem('token');
+    if (logged)
+    {
+        var section_log = document.getElementById("login");
+        var section_reg = document.getElementById("register");
+        section_log.innerHTML = "<b>User: " + logged + "</b>";
+        section_log.disabled = true;
+        section_reg.style.display = "none";
+    }
 }
 
 function isLoggedIn () {
