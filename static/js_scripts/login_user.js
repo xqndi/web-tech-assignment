@@ -27,10 +27,45 @@ function loginUser()
             document.body.appendChild(prompt);
             if (text == "Successfully logged in!")
             {
-                document.location = "/" + username.value;
+                localStorage.setItem('token', username.value);
+                document.location = "/";
             }
         });
     });
+}
+
+function isLoggedIn () {
+   const logged = localStorage.getItem('token');
+   if (!logged)
+   {
+       return false;
+   }
+}
+
+function loggoutUsers() {
+
+    fetch("login/user/auth", {
+        method: 'GET'
+    }).then(function(response) {
+        response.json().then(function(text) {
+        
+            console.log(Object.entries(text));
+            for(var el of text)
+            {   
+                console.log("fileusername: " + el.UserName);
+                console.log("localStorage: "+ localStorage.getItem('token'));
+                if(el.UserName == localStorage.getItem('token'))
+                {
+                    console.log("fileusername: " + el.UserName);
+                    console.log("localStorage: "+ localStorage.getItem('token'));
+                    return;
+                }
+            }   
+            localStorage.removeItem('token');
+        })
+    })
+
+    
 }
 
 function hideChildren()

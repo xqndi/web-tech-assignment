@@ -18,6 +18,7 @@ const jsonParser = bodyParser.json();
 const QUESTION = "QUESTION";
 const ANSWER = "ANSWER";
 
+
 // word model for word embeddings 
 // doc model for document embeddings
 let wordModel, docModel;
@@ -40,6 +41,24 @@ app.listen(port, () => {
 });
 
 app.use(express.static('static'));
+
+deleteloggedInUsers();
+
+function deleteloggedInUsers() {
+
+  //{\"1\":{\"Username\": \"\", \"UserPassword\": \"\"}}
+
+  fs.writeFileSync(path.resolve(__dirname,
+    "information_retrieval/data/loggedInUsers.json"),
+    "{}", function(){console.log('done')});
+}
+
+app.get('/login/user/auth', (req, res) => {
+  let LoggedInUsers = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+    "information_retrieval/data/loggedInUsers.json")));
+
+  res.send(JSON.stringify(Object.values(LoggedInUsers)));
+})
 
 app.get('/', (req, res) => {
   res.sendFile('static/index.html');
@@ -279,6 +298,11 @@ app.post('/register/new-user', jsonParser, function (request, response) {
       response.send("there is already an account registered with this email!");
       return;
     }
+    if(el.UserName == newObj.UserName)
+    {
+      response.send("username already taken!")
+      return;
+    }
   }
 
   AllUsersJson[uuidv4()] = newObj;
@@ -302,12 +326,18 @@ app.post('/login/user', jsonParser, function (request, response) {
   let AllUsersJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
     "information_retrieval/data/Users.json")));
 
+  let LoggedInUsers = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+    "information_retrieval/data/loggedInUsers.json")));
+
   var searchlist = Object.values(AllUsersJson);
   for(var el of searchlist)
   {
     if ((el.UserName == newObj.UserName) && (el.UserPassword == el.UserPassword))
     {
-      console.log("Turtle");
+      LoggedInUsers[uuidv4()] = newObj;
+      fs.writeFileSync(path.resolve(__dirname,
+        "information_retrieval/data/loggedInUsers.json"),
+        JSON.stringify(LoggedInUsers));
       response.send("Successfully logged in!");
       return;
     }

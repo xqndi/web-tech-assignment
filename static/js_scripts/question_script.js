@@ -88,17 +88,13 @@ async function fetchJson() {
 
 function submitAnswer() {
 
-    var url_string = window.location.href;
-    var url = new URL(url_string);
 
-    const arr = url.pathname.split("/");
-    UID = arr[arr.length - 3];
-
-    if (UID == "")
+    const logged = localStorage.getItem('token');
+    console.log(logged);
+    if (!logged)
     {
-        return;
+        return false;
     }
-
 
     const answer = document.getElementById("add-answer")
     if (!answer.value) {
@@ -131,17 +127,24 @@ function submitAnswer() {
     });
 }
 
+
+
 function likeElementById() {
     // not quite sure whether this always works :)
-    var url_string = window.location.href;
-    var url = new URL(url_string);
+    
+    // const username = localStorage.get('token');
+    // if (!username)
+    // {
+    //     return false;
+    // }
 
-    const arr = url.pathname.split("/");
-    UID = arr[arr.length - 3];
 
-    if (UID == "")
+
+    const logged = localStorage.getItem('token');
+    console.log(logged);
+    if (!logged)
     {
-        return;
+        return false;
     }
     
     console.log(this.value);
