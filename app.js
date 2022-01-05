@@ -75,11 +75,51 @@ app.post('/like-by-id', textParser, (req, res) => {
   const arr = req.body.toString().split(",");
   const id = arr[0];
   const type = arr[1];
+  const username = arr[2];
   if (!id || !type) {
     res.status(400);
     res.send("invalid id!");
     return;
   }
+
+
+
+  let likeUserJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+    "information_retrieval/data/User_likes.json"
+    )));
+  
+  var disliked_flag = false;
+  var id_to_delete = 0;
+
+  for (var el of likeUserJson)
+  {
+    console.log(el);
+    if((Object.values(el).User == username) && (Object.values(el).Type == type) && (Object.values(el).ElementId == id))
+    {
+      console.log(el);
+      id_to_delete = Object.keys(el);
+      disliked_flag = true;
+    }
+  }
+
+  
+  if (!disliked_flag) {
+    let newUserlikeJson = {};
+    newUserlikeJson["User"] = username;
+    newUserlikeJson["Type"] = type;
+    newUserlikeJson["ElementId"] = id;
+
+    likeUserJson[uuidv4] = newUserlikeJson;
+
+    fs.writeFileSync(path.resolve(__dirname,
+      "information_retrieval/data/User_likes.json"),
+      JSON.stringify(likeUserJson));
+  }
+  else
+  {
+    likeUserJson[id_to_delete] = "";
+  }
+
 
   let fileDataJson;
   if (type === QUESTION) {
@@ -92,7 +132,15 @@ app.post('/like-by-id', textParser, (req, res) => {
       )));
   } else { res.status(400).send("invalid type?"); return; }
 
-  fileDataJson[id]["Score"] = fileDataJson[id]["Score"] + 1;
+
+  if (!disliked_flag) {
+    fileDataJson[id]["Score"] = fileDataJson[id]["Score"] + 1;
+  }
+  else {
+    fileDataJson[id]["Score"] = fileDataJson[id]["Score"] - 1;
+  }
+
+  
 
   if (type === QUESTION) {
     fs.writeFileSync(path.resolve(__dirname,
@@ -103,8 +151,14 @@ app.post('/like-by-id', textParser, (req, res) => {
       "information_retrieval/data/Answers_head.json"),
       JSON.stringify(fileDataJson));
   }
+  if (disliked_flag) {
+    res.send("disliked");
+  }
+  else {
+    res.send("liked");
+  }
 
-  res.send("heya");
+  
 });
 
 app.get('/question/similar-questions/:qid', textParser, (req, res) => {

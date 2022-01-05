@@ -19,22 +19,50 @@ async function fetchJson() {
             let isQuestion = true;
 
             for (const [k, v] of Object.entries(json)) {
-                const field = document.createElement("p");
-                field.id = k;
-                field.innerHTML = JSON.stringify({[k]: v}, null, 2) + "\n\n";
-                document.body.appendChild(field);
+                const titleString = v["Title"];
+                if (titleString) {
+                    const title = document.createElement("h3");
+                    title.innerHTML = v["Title"];
+                    title.className = "TitleOfQuestion";
+                    document.body.appendChild(title);
+                }
+                const userId = document.createElement("h4");
+                userId.innerHTML = "User: " + v["OwnerUserId"];
+                userId.className = "UserIdOfQuestionAndAnswers";
+                document.body.appendChild(userId);
+
+                const date = document.createElement("h4");
+                date.innerHTML = "Created on: " + v["CreationDate"];
+                date.className = "DateOfQuestionAndAnswers";
+                document.body.appendChild(date);
+
+                const score = document.createElement("h4");
+                score.innerHTML = "Score: " + v["Score"];
+                score.className = "ScoreOfQuestionAndAnswers";
+                document.body.appendChild(score);
+
+                const body = document.createElement("p");
+                body.className = "BodyOfQuestionAndAnswers";
+                body.id = k;
+                //field.innerHTML = JSON.stringify({[k]: v}, null, 2)
+                body.innerHTML = JSON.stringify(v["Body"], null, 2)
+                                        .replace(/\\n/g, '')
+                                        .replace(/\"/g, " ")
+                                        .replace(/\\/g, " ");
+                document.body.appendChild(body);
                 const logged = localStorage.getItem('token');
                 if (logged)
                 {
                     const btn = document.createElement("button");
-                    btn.innerHTML = "like";
+                    btn.id = "like-dislike";
+                    btn.innerHTML = "like/dislike";
                 
                 
-                    if (isQuestion) { btn.value = [k, "QUESTION"]; }
-                    else { btn.value = [k, "ANSWER"]; }
+                    if (isQuestion) { btn.value = [k, "QUESTION", localStorage.getItem('token')]; }
+                    else { btn.value = [k, "ANSWER", localStorage.getItem('token')]; }
                     btn.addEventListener("click", likeElementById);
                     document.body.appendChild(btn);
-                    btn.before(field);
+                    btn.before(body);
                 }
                 if (isQuestion) {
                     const a_header = document.createElement("h2");
@@ -152,7 +180,20 @@ function likeElementById() {
         method: 'POST',
         body: this.value
     }).then(function(response) {
-        console.log("done with liking");
-        document.location.reload();
+        response.text().then(function(text) {
+            if (text == "liked") {
+                document.location.reload();
+                var btn = document.getElementById("like-dislike");
+                btn.style.background = "green"
+                btn.innerHTML = "LIKED :)"
+            }
+            else if (text == "disliked") {
+                document.location.reload();
+                var btn = document.getElementById("like-dislike");
+                btn.style.background= "red"
+                btn.innerHTML = "DISLIKED :("
+            }
+        })
+        
     });
 }
