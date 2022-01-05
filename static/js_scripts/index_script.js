@@ -88,7 +88,3 @@ function displayMostPopular() {
   })
 }
 
-function registerNewUser() {
-  
-}
-

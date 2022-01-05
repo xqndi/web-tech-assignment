@@ -89,18 +89,18 @@ app.post('/like-by-id', textParser, (req, res) => {
     )));
   
   var disliked_flag = false;
-  var id_to_delete = 0;
+  var id_of_json_el_to_delete = 0;
 
-  for (var el of likeUserJson)
+  for (var el of Object.keys(likeUserJson))
   {
-    console.log(el);
-    if((Object.values(el).User == username) && (Object.values(el).Type == type) && (Object.values(el).ElementId == id))
+
+    if((likeUserJson[el].User == username) && (likeUserJson[el].Type == type) && (likeUserJson[el].ElementId == id))
     {
-      console.log(el);
-      id_to_delete = Object.keys(el);
+      id_of_json_el_to_delete = el
       disliked_flag = true;
     }
   }
+
 
   
   if (!disliked_flag) {
@@ -109,7 +109,9 @@ app.post('/like-by-id', textParser, (req, res) => {
     newUserlikeJson["Type"] = type;
     newUserlikeJson["ElementId"] = id;
 
-    likeUserJson[uuidv4] = newUserlikeJson;
+    
+
+    likeUserJson[uuidv4()] = newUserlikeJson;
 
     fs.writeFileSync(path.resolve(__dirname,
       "information_retrieval/data/User_likes.json"),
@@ -117,7 +119,11 @@ app.post('/like-by-id', textParser, (req, res) => {
   }
   else
   {
-    likeUserJson[id_to_delete] = "";
+    delete likeUserJson[id_of_json_el_to_delete];
+
+    fs.writeFileSync(path.resolve(__dirname,
+      "information_retrieval/data/User_likes.json"),
+      JSON.stringify(likeUserJson));
   }
 
 

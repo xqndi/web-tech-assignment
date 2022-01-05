@@ -1,5 +1,6 @@
 
 let QID = "-2";
+like_params = [];
 
 async function fetchJson() {
     var url_string = window.location.href;
@@ -37,6 +38,7 @@ async function fetchJson() {
                 document.body.appendChild(date);
 
                 const score = document.createElement("h4");
+                score.id = "score" + k;
                 score.innerHTML = "Score: " + v["Score"];
                 score.className = "ScoreOfQuestionAndAnswers";
                 document.body.appendChild(score);
@@ -54,13 +56,15 @@ async function fetchJson() {
                 if (logged)
                 {
                     const btn = document.createElement("button");
-                    btn.id = "like-dislike";
+                    btn.id = "like/dislike";
                     btn.innerHTML = "like/dislike";
                 
                 
                     if (isQuestion) { btn.value = [k, "QUESTION", localStorage.getItem('token')]; }
                     else { btn.value = [k, "ANSWER", localStorage.getItem('token')]; }
-                    btn.addEventListener("click", likeElementById);
+                    btn.addEventListener("click", function() {
+                        likeElementById(this);
+                    }, false);
                     document.body.appendChild(btn);
                     btn.before(body);
                 }
@@ -117,6 +121,7 @@ async function fetchJson() {
         })
      });
 
+    first_load = true;
 }
 
 function submitAnswer() {
@@ -164,9 +169,11 @@ function submitAnswer() {
 
 
 
-function likeElementById() {
+function likeElementById(btn) {
     // not quite sure whether this always works :)
-    
+
+    //btn.style.background = "#00FF00";
+    console.log(btn.value)
 
     const logged = localStorage.getItem('token');
     if (!logged)
@@ -174,24 +181,27 @@ function likeElementById() {
         return false;
     }
     
-    console.log(this.value);
-
     fetch("like-by-id", {
         method: 'POST',
-        body: this.value
+        body: btn.value
     }).then(function(response) {
         response.text().then(function(text) {
             if (text == "liked") {
-                document.location.reload();
-                var btn = document.getElementById("like-dislike");
-                btn.style.background = "green"
-                btn.innerHTML = "LIKED :)"
+                console.log("hi");
+                btn.style.background = "#00FF00";
+                btn.innerHTML = "LIKED :)";
+                var score_element = document.getElementById("score" + (btn.value).split(',')[0])
+                var old_score = parseInt(score_element.innerHTML.split(' ')[1]);
+                var new_score = old_score + 1;
+                score_element.innerHTML = "Score: " + new_score;
             }
             else if (text == "disliked") {
-                document.location.reload();
-                var btn = document.getElementById("like-dislike");
-                btn.style.background= "red"
-                btn.innerHTML = "DISLIKED :("
+                btn.style.background = "#FF0000";
+                btn.innerHTML = "DISLIKED :(";
+                var score_element = document.getElementById("score" + (btn.value).split(',')[0])
+                var old_score = parseInt(score_element.innerHTML.split(' ')[1]);
+                var new_score = old_score - 1;
+                score_element.innerHTML = "Score: " + new_score;
             }
         })
         
