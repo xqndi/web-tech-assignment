@@ -416,9 +416,6 @@ app.post('/login/user', jsonParser, function (request, response) {
   response.send("Wrong password or username!");
 });
 
-app.get('/:user', (req, res) => {
-  res.sendFile(__dirname + "/static/index.html")
-})
 
 // handling of missing sites
 // TODO which way
