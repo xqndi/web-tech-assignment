@@ -53,6 +53,7 @@
 }
 #like\/dislike:hover{
     background-color: gray;
+    cursor: pointer;
 }
 
 #like\/dislike{
@@ -73,6 +74,7 @@
 
 #Submitbuttonclass:hover{
     background: lightslategray;
+    cursor: pointer;
 }
 
 #add-answer{

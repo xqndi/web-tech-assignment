@@ -8,8 +8,10 @@
     width:150px;
     top: 3px;
     margin: auto;
+    color: black;
 
 }
+
 
 #user_id{
     font-family: Arial, sans-serif;
@@ -22,9 +24,7 @@
     padding-right: 20px;
 }
 
-button#register.tabs{
-    border-radius: 0 10px 10px 0 ;
-}
+
 button#home.tabs{
     border-radius: 10px 0 0 10px ;
 }
@@ -37,11 +37,10 @@ button#home.tabs{
     background-size:18px;
     background-repeat: no-repeat;
     background-position: 1px 1px;
-    border-radius: 7px;
-    height: 25px;
+    border-radius: 0 10px 10px 0;
+    height: 26px;
     width: 200px;
     padding-left: 25px;
-    margin-left: 5px;
 }
 
 footer {
@@ -51,6 +50,7 @@ footer {
     color: white;
     text-align: center;
     left: 300px;
+    z-index: 999;
     max-height: calc(100vh + 50px);
     position: fixed;
 
@@ -60,6 +60,7 @@ footer {
     border: none;
     width: 20%;
     cursor: pointer;
+    z-index: 999;
     background-color: #00B7FF;
     padding-top: 10px;
     font-size: 30px;
