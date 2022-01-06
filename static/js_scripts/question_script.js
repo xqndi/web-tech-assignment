@@ -192,8 +192,8 @@ function getUserLikes() {
 function submitAnswer() {
 
 
-    const logged = localStorage.getItem('token');
-    if (!logged)
+    const loggerUser = localStorage.getItem('token');
+    if (!loggerUser)
     {
         var input_field = document.getElementById("add-answer")
         input_field.style.color = "red";
@@ -214,7 +214,7 @@ function submitAnswer() {
 
     // TODO extract userID, etc...
     let newAnswerJson = {};
-    newAnswerJson["OwnerUserId"] = -1;
+    newAnswerJson["OwnerUserId"] = loggerUser;
     newAnswerJson["CreationDate"] = dateTime;
     newAnswerJson["ParentId"] = QID;
     newAnswerJson["Score"] = 0;

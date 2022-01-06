@@ -1,6 +1,6 @@
 function createNewQuestion() {
-    const logged = localStorage.getItem('token');
-    if (!logged)
+    const loggedUser = localStorage.getItem('token');
+    if (!loggedUser)
     {
         return false;
     }
@@ -29,7 +29,7 @@ function createNewQuestion() {
 
     // TODO extract userID, etc...
     let newQuestionJson = {};
-    newQuestionJson["OwnerUserId"] = -1;
+    newQuestionJson["OwnerUserId"] = loggedUser;
     newQuestionJson["CreationDate"] = dateTime;
     newQuestionJson["Score"] = 0;
     newQuestionJson["Title"] = title.value;
