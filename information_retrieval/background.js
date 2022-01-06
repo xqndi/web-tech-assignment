@@ -27,14 +27,6 @@ function preprocess(originalString) {
         // replace whitespace-chains
         .replace(/ +/g, " ");
         
-/*     str = str.split(/(?<=[.]) (?=[a-z])/);
-
-    const res = [];
-    str.forEach(element => {
-        res.push(element.replace(".", " "))
-        //.replace(/[^A-Z0-9]/ig, " ")
-    });
-    return res; */
     str = str.replace(/\./g, "") 
     return str.trim();
 }
@@ -44,7 +36,6 @@ function createCorpus(inputFile, outputFile) {
     // Preprocess the strings
     // Write to the output file
 
-    // TODO change to async?
     const dataRaw = fs.readFileSync(path.resolve(__dirname, inputFile));
     const json_data = JSON.parse(dataRaw);
 
@@ -84,7 +75,8 @@ function createEmbeddings(inputFile, w2v_model, outputFile) {
             res_arr = [...new Set(res_arr)];
 
             const vecs = w2v_model.getVectors(res_arr);
-            // .slice() to copy by value!!
+
+            // TODO this can throw an error if minCount is too high
             const doc_vector = vecs[0].values.slice();
     
             vecs.slice(1).forEach(element => {
@@ -116,7 +108,8 @@ function createEmbeddings(inputFile, w2v_model, outputFile) {
 // TODO why create corpus only with answers?
 createCorpus("data/Answers_head.json", 'data/corpus.txt');
 w2v.word2vec("information_retrieval/data/corpus.txt",
- "information_retrieval/data/word_vectors.txt");
+ "information_retrieval/data/word_vectors.txt",
+ );
 
 w2v.loadModel("information_retrieval/data/word_vectors.txt", function( error, model ) {
     createEmbeddings("data/Answers_head.json", model, 

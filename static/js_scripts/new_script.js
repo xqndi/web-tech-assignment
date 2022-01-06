@@ -1,6 +1,4 @@
 function createNewQuestion() {
-    console.log("yea");
-
     const logged = localStorage.getItem('token');
     if (!logged)
     {
@@ -45,6 +43,13 @@ function createNewQuestion() {
         body: JSON.stringify(newQuestionJson)
     }).then(function(response) {
         response.text().then(function(text) {
+            if (text == "-1") {
+                // here it was not possibly to create 
+                // a vector representation for the question-body
+                console.log("Couldn't create question");
+                window.alert("Please reformulate your question");
+                return;
+            }
         // todo this is not speficied anywhere
         // redirct to question-page of the new question
         location.href = "/question/" + text;

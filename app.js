@@ -222,7 +222,7 @@ app.post('/question/submit-question', jsonParser, function (request, response) {
   const qVector = createW2vForNewQuestion(newObj["Body"]);
   // TODO good handling
   if (!qVector) {
-    response.send("couldn't create vector for question...");
+    response.send("-1");
     return;
   }
 
