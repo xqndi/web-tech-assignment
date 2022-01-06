@@ -17,7 +17,7 @@ input:focus {
 #register_button{
     color: white;
     border: none;
-    width: 5%;
+    width: 10%;
     font-weight: bold;
     cursor: pointer;
     height: 30px;
