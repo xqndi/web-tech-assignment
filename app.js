@@ -216,7 +216,6 @@ app.post('/question/submit-answer', jsonParser, function (request, response) {
 });
 
 app.get('/question/get-user-likes', jsonParser, function(request, response) {
-  const user = request.body;
 
   let user_likes_json = JSON.parse(fs.readFileSync(path.resolve(__dirname,
     "information_retrieval/data/User_likes.json"

@@ -23,7 +23,7 @@ async function fetchJson() {
             q_header.id = "question_header"
             document.body.appendChild(q_header);
             let isQuestion = true;
-
+            
             
             for (const [k, v] of Object.entries(json)) {
                 const titleString = v["Title"];
@@ -78,8 +78,14 @@ async function fetchJson() {
                     //btn.innerHTML = "like/dislike";
                     for(el of user_likes)
                     {
-                        if (el.Type == type && el.ElementId == k[0])
+                        // console.log(el.User);
+                        // console.log("el.Type: "+ el.Type);
+                        // console.log("type: " + type);
+                        // console.log("ElementId " + el.ElementId);
+                        // console.log("k: " + k);
+                        if (el.Type == type && el.ElementId == k)
                         {
+                            
                             liked = true;
                         }
                     }
@@ -168,10 +174,13 @@ function getUserLikes() {
     }).then(function(response) {
         response.json().then(function(text) {
             new_text = [];
+            getUserLikes = [];
             for (var el of text)
             {
                 if (el.User == localStorage.getItem('token'))
                 {
+                    //console.log(el.User);
+                    //console.log(el.Type);
                     new_text.push(el);
                 }
             }
