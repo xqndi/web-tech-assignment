@@ -7,6 +7,19 @@
     font-size: 20px;
     width:150px;
     top: 3px;
+    margin: auto;
+
+}
+
+#user_id{
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: black;
+    font-weight: lighter;
+    border-radius: 0 10px 10px 0 ;
+    width: auto;
+    padding-left: 10px;
+    padding-right: 20px;
 }
 
 button#register.tabs{
@@ -15,7 +28,7 @@ button#register.tabs{
 button#home.tabs{
     border-radius: 10px 0 0 10px ;
 }
-.tabs:hover{
+.tabs:hover, #aboutus:hover, #searchbutton:hover {
     background-color: slategrey;
 }
 
@@ -29,4 +42,27 @@ button#home.tabs{
     width: 200px;
     padding-left: 25px;
     margin-left: 5px;
+}
+
+footer {
+    width: 100%;
+    height: 50px;
+    bottom: 0;
+    color: white;
+    text-align: center;
+    left: 300px;
+    max-height: calc(100vh + 50px);
+    position: fixed;
+
+}
+#aboutus{
+    color: white;
+    border: none;
+    width: 20%;
+    cursor: pointer;
+    background-color: #00B7FF;
+    padding-top: 10px;
+    font-size: 30px;
+    padding-bottom: 30px;
+    border-radius: 20px 20px 0 0;
 }

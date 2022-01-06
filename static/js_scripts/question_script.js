@@ -16,6 +16,7 @@ async function fetchJson() {
         response.json().then(function(json) {
             const q_header = document.createElement("h1");
             q_header.innerText = "Question:";
+            q_header.id = "question_header"
             document.body.appendChild(q_header);
             let isQuestion = true;
 
@@ -27,17 +28,19 @@ async function fetchJson() {
                     title.className = "TitleOfQuestion";
                     document.body.appendChild(title);
                 }
+                const date = document.createElement("h4");
+                let datename =  v["CreationDate"];
+                let test = datename.replace('T',' ').replace('Z', '');
+                date.innerHTML = "Created on: " + test;
+                date.className = "DateOfQuestionAndAnswers";
+                document.body.appendChild(date);
+
                 const userId = document.createElement("h4");
                 userId.innerHTML = "User: " + v["OwnerUserId"];
                 userId.className = "UserIdOfQuestionAndAnswers";
                 document.body.appendChild(userId);
 
-                const date = document.createElement("h4");
-                date.innerHTML = "Created on: " + v["CreationDate"];
-                date.className = "DateOfQuestionAndAnswers";
-                document.body.appendChild(date);
-
-                const score = document.createElement("h4");
+                const score = document.createElement("h3");
                 score.id = "score" + k;
                 score.innerHTML = "Score: " + v["Score"];
                 score.className = "ScoreOfQuestionAndAnswers";
@@ -57,7 +60,9 @@ async function fetchJson() {
                 {
                     const btn = document.createElement("button");
                     btn.id = "like/dislike";
-                    btn.innerHTML = "like/dislike";
+                    //btn.innerHTML = "like/dislike";
+                    btn.innerHTML = '<img id="unliked_img" src="../images/unliked.png"  alt="unliked"/>';
+
                 
                 
                     if (isQuestion) { btn.value = [k, "QUESTION", localStorage.getItem('token')]; }
@@ -71,6 +76,7 @@ async function fetchJson() {
                 if (isQuestion) {
                     const a_header = document.createElement("h2");
                     a_header.innerText = "Answers:";
+                    a_header.id = "Answerheader";
                     document.body.appendChild(a_header);
                     isQuestion = false;
                 }
@@ -87,6 +93,7 @@ async function fetchJson() {
 
             const submitBtn = document.createElement("button");
             submitBtn.innerHTML = "Submit Answer";
+            submitBtn.id = "Submitbuttonclass"
             submitBtn.addEventListener("click", submitAnswer);
             document.body.appendChild(submitBtn);
             
@@ -107,6 +114,7 @@ async function fetchJson() {
     
               if (!question) {
                 question = document.createElement("a");
+                question.className = "similarquestion"
                 question.id = ID_COUNTER.toString();
                 question.innerText = val + "\n";
                 question.href = "question/" + qid;
@@ -174,7 +182,6 @@ function likeElementById(btn) {
 
     //btn.style.background = "#00FF00";
     console.log(btn.value)
-
     const logged = localStorage.getItem('token');
     if (!logged)
     {
@@ -188,16 +195,18 @@ function likeElementById(btn) {
         response.text().then(function(text) {
             if (text == "liked") {
                 console.log("hi");
-                btn.style.background = "#00FF00";
-                btn.innerHTML = "LIKED :)";
+                //btn.style.background = "#00FF00";
+                //btn.innerHTML = "LIKED :)";
+                btn.innerHTML = '<img id="liked_img" src="../images/liked.png"  alt="liked"/>';
                 var score_element = document.getElementById("score" + (btn.value).split(',')[0])
                 var old_score = parseInt(score_element.innerHTML.split(' ')[1]);
                 var new_score = old_score + 1;
                 score_element.innerHTML = "Score: " + new_score;
             }
             else if (text == "disliked") {
-                btn.style.background = "#FF0000";
-                btn.innerHTML = "DISLIKED :(";
+                //btn.style.background = "#FF0000";
+                //btn.innerHTML = "DISLIKED :(";
+                btn.innerHTML = '<img id="unliked_img" src="../images/unliked.png"  alt="unliked"/>';
                 var score_element = document.getElementById("score" + (btn.value).split(',')[0])
                 var old_score = parseInt(score_element.innerHTML.split(' ')[1]);
                 var new_score = old_score - 1;

@@ -1,0 +1,95 @@
+#question_header{
+    font-family: Inconsolata, sans-serif;
+    color: darkblue;
+}
+
+#Answerheader{
+    font-family: Inconsolata, sans-serif;
+}
+
+.TitleOfQuestion{
+    font-family: Inconsolata, sans-serif;
+    color: darkblue;
+    margin-bottom: -1em;
+}
+
+.UserIdOfQuestionAndAnswers{
+    font-family: Inconsolata, sans-serif;
+    font-size: 20px;
+    background-color: #00B7FF;
+    border: none;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    padding: 2px 2px 2px 2px;
+    min-width: 80px;
+    bottom: 20px;
+    margin: 0;
+    height:100%;
+    box-sizing: border-box;
+    border-radius: 5px 5px 5px 0;
+}
+
+.ScoreOfQuestionAndAnswers{
+    margin: 0;
+    bottom: 25px;
+    font-size: 15px;
+    border-radius: 0 0 5px 5px;
+    background-color: #00B7FF;
+    padding: 2px 2px 2px 2px;
+    max-width: 70px;
+    width: 100%;
+    position: relative;
+}
+.BodyOfQuestionAndAnswers{
+    position: relative;
+    bottom: 25px;
+    font-family: Arial, sans-serif;
+}
+
+#unliked_img, #liked_img{
+    max-width: 30px;
+    height: auto;
+}
+#like\/dislike:hover{
+    background-color: gray;
+}
+
+#like\/dislike{
+    background: transparent;
+    border-radius: 6px;
+}
+
+#Submitbuttonclass{
+    color: white;
+    border: none;
+    width: 15%;
+    font-weight: bold;
+    cursor: pointer;
+    height: 30px;
+    background-color: #00B7FF;
+    border-radius: 0 5px 5px 0;
+}
+
+#Submitbuttonclass:hover{
+    background: lightslategray;
+}
+
+#add-answer{
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: 4px 4px;
+    border-radius: 5px 0 0 5px;
+    padding-left: 30px;
+    width:187px;
+    height:24px;
+    border-color: darkgrey;
+}
+
+.similarquestion{
+    font-family: "Arial", sans-serif;
+    color: black;
+    text-decoration: none;
+    list-style-position:inside;
+    display: table;
+}
