@@ -121,6 +121,7 @@ async function fetchJson() {
 
             const own_answer_header = document.createElement("h3");
             own_answer_header.innerText = "Do you have a better answer?:";
+            own_answer_header.className = "ownanswerclass";
             document.body.appendChild(own_answer_header);     
             const inp = document.createElement("INPUT");
             inp.id = "add-answer";
@@ -135,6 +136,7 @@ async function fetchJson() {
             
             const similar_header = document.createElement("h2");
             similar_header.innerText = "Similar questions:";
+            similar_header.className = "Simquestionclass";
             document.body.appendChild(similar_header);       
         })
      });

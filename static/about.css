@@ -1,9 +1,11 @@
+/*
 body{
     background: url("images/naruto.jpg");
     background-size: 100%;
     background-color: rgba(255,255,255,0.9);
     background-blend-mode: lighten;
 }
+*/
 
 #about_header{
     position: relative;
@@ -14,6 +16,6 @@ body{
 #people{
     position: relative;
     top: -200px;
-    font-family: Chilanka, sans-serif;
+    font-family: Inconsolata, sans-serif;
     left: 20px;
 }

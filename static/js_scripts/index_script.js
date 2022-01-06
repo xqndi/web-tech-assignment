@@ -20,6 +20,7 @@ function processQuery() {
           const qid = key.substring(0, key.length - 1);
           question = document.createElement("a");
           question.innerText = val + "\n";
+          question.className = "similarquestionclass";
           // TODO where does UID come from??
           question.href = "/question/" + qid;
           article.appendChild(question);

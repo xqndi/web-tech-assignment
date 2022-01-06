@@ -1,3 +1,9 @@
+#login_header{
+    font-family: Inconsolata, sans-serif;
+    color: darkblue;
+}
+
+
 .loginfield{
     width: 200px;
     height:40px;
@@ -17,7 +23,7 @@ input:focus {
 #login_button{
     color: white;
     border: none;
-    width: 5%;
+    width: 60px;
     font-weight: bold;
     cursor: pointer;
     height: 30px;

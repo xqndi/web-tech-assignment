@@ -1,3 +1,11 @@
+#new_question{
+    font-family: Inconsolata, sans-serif;
+    color: darkblue;
+}
+.newquestionsclass{
+    font-family: Inconsolata, sans-serif;
+}
+
 input[type=text], select{
     width: 30%;
     padding: 12px 10px;
@@ -9,7 +17,7 @@ input[type=text], select{
 #question_ASK{
     color: white;
     border: none;
-    width: 5%;
+    width: 60px;
     height: 30px;
     cursor: pointer;
     margin: 8px 0;
