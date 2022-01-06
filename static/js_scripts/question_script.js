@@ -1,6 +1,7 @@
 
 let QID = "-2";
 like_params = [];
+let user_likes = [];
 
 async function fetchJson() {
     var url_string = window.location.href;
@@ -10,8 +11,11 @@ async function fetchJson() {
     const arr = url.pathname.split("/");
     QID = arr[arr.length - 1];
 
+    getUserLikes();
+
     let query_string = ("q/" + QID).toString();
     console.log(query_string);
+    
     await fetch(query_string).then(function(response) {
         response.json().then(function(json) {
             const q_header = document.createElement("h1");
@@ -20,6 +24,7 @@ async function fetchJson() {
             document.body.appendChild(q_header);
             let isQuestion = true;
 
+            
             for (const [k, v] of Object.entries(json)) {
                 const titleString = v["Title"];
                 if (titleString) {
@@ -58,15 +63,40 @@ async function fetchJson() {
                 const logged = localStorage.getItem('token');
                 if (logged)
                 {
+                    var type = "NONE";
+                    var liked = false;
+                    if (isQuestion)
+                    {
+                        type = "QUESTION";
+                    }
+                    else
+                    {
+                        type = "ANSWER";
+                    }
                     const btn = document.createElement("button");
                     btn.id = "like/dislike";
                     //btn.innerHTML = "like/dislike";
-                    btn.innerHTML = '<img id="unliked_img" src="../images/unliked.png"  alt="unliked"/>';
+                    for(el of user_likes)
+                    {
+                        if (el.Type == type && el.ElementId == k[0])
+                        {
+                            liked = true;
+                        }
+                    }
+                    if (liked)
+                    {
+                        btn.innerHTML = '<img id="liked_img" src="../images/liked.png"  alt="liked"/>';
+                    }
+                    else
+                    {
+                        btn.innerHTML = '<img id="unliked_img" src="../images/unliked.png"  alt="unliked"/>';
+                    }
+                    
 
                 
                 
-                    if (isQuestion) { btn.value = [k, "QUESTION", localStorage.getItem('token')]; }
-                    else { btn.value = [k, "ANSWER", localStorage.getItem('token')]; }
+                    btn.value = [k, type, localStorage.getItem('token')];
+                   
                     btn.addEventListener("click", function() {
                         likeElementById(this);
                     }, false);
@@ -130,6 +160,24 @@ async function fetchJson() {
      });
 
     first_load = true;
+}
+
+function getUserLikes() {
+    fetch("question/get-user-likes", {
+        method: "GET"
+    }).then(function(response) {
+        response.json().then(function(text) {
+            new_text = [];
+            for (var el of text)
+            {
+                if (el.User == localStorage.getItem('token'))
+                {
+                    new_text.push(el);
+                }
+            }
+            user_likes = new_text;
+        })
+    })
 }
 
 function submitAnswer() {

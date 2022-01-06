@@ -215,6 +215,17 @@ app.post('/question/submit-answer', jsonParser, function (request, response) {
   response.send("all good (?)");
 });
 
+app.get('/question/get-user-likes', jsonParser, function(request, response) {
+  const user = request.body;
+
+  let user_likes_json = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+    "information_retrieval/data/User_likes.json"
+    )));
+
+  response.send(JSON.stringify(Object.values(user_likes_json)));
+
+})
+
 app.post('/question/submit-question', jsonParser, function (request, response) {
   const newObj = request.body;
 
