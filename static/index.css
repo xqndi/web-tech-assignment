@@ -2,6 +2,12 @@
     font-family: Inconsolata, sans-serif;
     color: darkblue;
 }
+
+#popular-questions-header{
+    font-family: Inconsolata, sans-serif;
+}
+
+
 #query-searchfield{
     background-image: url("images/Magnifying_glass.png");
     background-size: 20px;
@@ -17,7 +23,7 @@
 #searchbutton{
     color: white;
     border: none;
-    width: 5%;
+    width: 70px;
     font-weight: bold;
     cursor: pointer;
     height: 30px;
@@ -32,7 +38,7 @@
     left:180px;
 }
 
-.questions{
+.questions, .similarquestionclass{
     font-family: "Arial", sans-serif;
     color: black;
     text-decoration: none;
