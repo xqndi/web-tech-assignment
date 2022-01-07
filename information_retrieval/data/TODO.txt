@@ -1,20 +1,5 @@
 --Things to consider / Things to do--
 
-    o referencing localhost in index.html
-
     o server-side error handling !!
 
-    o CHECK ALLOWED DEPENDENCIES!! 
-
-    o Preprocessing: stemming?
-
     o Preprocessing: Consider links or just remove them?
-
-    o Preprocessing: What to do with dots?
-
-    o <it's> to <it is> but <Wendy's> still <Wendy's> 
-
-    o What to do with dashes (Bindestriche)?
-
-    o What to do with brackets? Because just removing 
-        them changes meaning of sentence / context. 

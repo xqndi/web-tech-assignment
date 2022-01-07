@@ -58,12 +58,10 @@ function createCorpus(inputFile, outputFile) {
 function createEmbeddings(inputFile, w2v_model, outputFile) {
     // Create the document embeddings using the pretrained model
     // Save them for lookup of the running server
-        // TODO change to async?
         const dataRaw = fs.readFileSync(path.resolve(__dirname, inputFile));
         const json_data = JSON.parse(dataRaw);
     
         // create write-stream
-        // todo!! file always is erased here (!)
         const stream = fs.createWriteStream(path.resolve(__dirname, outputFile))
 
         const dimensions = parseInt(w2v_model.size);
@@ -75,6 +73,13 @@ function createEmbeddings(inputFile, w2v_model, outputFile) {
             res_arr = [...new Set(res_arr)];
 
             const vecs = w2v_model.getVectors(res_arr);
+
+            if (vecs.length == 0) {
+                // TODO we have un real problemo here
+                // what do we do
+                console.log("no word vectors for body found");
+                continue;
+            }
 
             // TODO this can throw an error if minCount is too high
             const doc_vector = vecs[0].values.slice();
@@ -104,18 +109,14 @@ function createEmbeddings(inputFile, w2v_model, outputFile) {
 // - build w2v model (i.e., word vectors)
 // - create document embeddings
 
-// TODO remove head
-// TODO why create corpus only with answers?
-createCorpus("data/Answers_head.json", 'data/corpus.txt');
+createCorpus("data/Answers.json", 'data/corpus.txt');
 w2v.word2vec("information_retrieval/data/corpus.txt",
  "information_retrieval/data/word_vectors.txt",
  );
 
 w2v.loadModel("information_retrieval/data/word_vectors.txt", function( error, model ) {
-    createEmbeddings("data/Answers_head.json", model, 
-    "data/answer_entities.txt");
-    createEmbeddings("data/Questions_head.json", model, 
+    /*     createEmbeddings("data/Answers.json", model, 
+    "data/answer_entities.txt"); */
+    createEmbeddings("data/Questions.json", model, 
     "data/question_entities.txt");
 });
-/* createEmbeddings("data/Questions.json", "data/word_vectors.txt",
- "data/entities.txt"); */

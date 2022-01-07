@@ -130,11 +130,11 @@ app.post('/like-by-id', textParser, (req, res) => {
   let fileDataJson;
   if (type === QUESTION) {
     fileDataJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-      "information_retrieval/data/Questions_head.json"
+      "information_retrieval/data/Questions.json"
       )));
   } else if (type === ANSWER) {
     fileDataJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-      "information_retrieval/data/Answers_head.json"
+      "information_retrieval/data/Answers.json"
       )));
   } else { res.status(400).send("invalid type?"); return; }
 
@@ -150,11 +150,11 @@ app.post('/like-by-id', textParser, (req, res) => {
 
   if (type === QUESTION) {
     fs.writeFileSync(path.resolve(__dirname,
-      "information_retrieval/data/Questions_head.json"),
+      "information_retrieval/data/Questions.json"),
       JSON.stringify(fileDataJson));
   } else if (type === ANSWER) {
     fs.writeFileSync(path.resolve(__dirname,
-      "information_retrieval/data/Answers_head.json"),
+      "information_retrieval/data/Answers.json"),
       JSON.stringify(fileDataJson));
   }
   if (disliked_flag) {
@@ -201,14 +201,14 @@ app.post('/question/submit-answer', jsonParser, function (request, response) {
 
   // TODO parse json-files once and not all the time...
   let AllAnswersJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Answers_head.json"
+    "information_retrieval/data/Answers.json"
     )));
 
   // generate (unique) key for new Answers / Questions
   AllAnswersJson[uuidv4()] = newObj;
 
   fs.writeFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Answers_head.json"),
+    "information_retrieval/data/Answers.json"),
     JSON.stringify(AllAnswersJson));
 
   // TODO what to send
@@ -238,7 +238,7 @@ app.post('/question/submit-question', jsonParser, function (request, response) {
 
   // TODO parse json-files once and not all the time...
   let allQuestionsJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Questions_head.json"
+    "information_retrieval/data/Questions.json"
     )));
 
   const generatedKey = uuidv4();
@@ -246,7 +246,7 @@ app.post('/question/submit-question', jsonParser, function (request, response) {
   allQuestionsJson[generatedKey] = newObj;
 
   fs.writeFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Questions_head.json"),
+    "information_retrieval/data/Questions.json"),
     JSON.stringify(allQuestionsJson));
 
   let fileData = fs.readFileSync(path.resolve(__dirname,
@@ -278,7 +278,7 @@ app.post('/question/submit-question', jsonParser, function (request, response) {
 
 
 const data = require(path.resolve(
-  __dirname, 'information_retrieval/data/Questions_head.json'));
+  __dirname, 'information_retrieval/data/Questions.json'));
 
 app.get('/popular-articles', (req, res) => {
 
@@ -316,12 +316,12 @@ app.get('/q/:qid', (req, res) => {
   }
 
   const questionsJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Questions_head.json"
+    "information_retrieval/data/Questions.json"
     )));
 
 
   const answersJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Answers_head.json"
+    "information_retrieval/data/Answers.json"
     )));
 
     const jsonRes = {};
@@ -425,13 +425,6 @@ app.get("/*", function (req, res, next) {
 })
 
 function rankArticles(inputFile) {
-  //const json_data = JSON.parse(inputFile);
-
-  //var sorted_list = Object.JSON(JSON.stringify(inputFile)).map(key => inputFile[key]);
-  
-  //var sorted_list = Object.keys(inputFile).sort((a, b) => (a.Score < b.Score) ? 1 : -1);
-  //var sorted_list = Object.entries(inputFile).sort((a, b) => (a.Score < b.Score) ? 1 : -1);
-
   var sorted_list = Object.entries(inputFile);
   var key_val_pair = [];
   
@@ -442,9 +435,7 @@ function rankArticles(inputFile) {
 
   key_val_pair.sort((a, b) => (a.Score < b.Score) ? 1 : -1);
 
-
-  //sorted_list.sort((a, b) => (a.Score < b.Score) ? 1 : -1);
-  return key_val_pair;
+  return key_val_pair.slice(0, 10);
 }
 
 function preprocess(originalString) {
@@ -507,10 +498,10 @@ function createW2vForNewQuestion(q) {
 
 function doSimilaritySearch(doc_vector) {
   // now rank documents against our new query-vector
-  const nearestVectors = docModel.getNearestWords(doc_vector, 5)
+  const nearestVectors = docModel.getNearestWords(doc_vector, 10)
 
   const jsonData = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Questions_head.json"
+    "information_retrieval/data/Questions.json"
     )));
 
   let res = {};

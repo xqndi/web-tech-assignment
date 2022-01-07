@@ -4,6 +4,7 @@ like_params = [];
 let user_likes = [];
 
 async function fetchJson() {
+    console.log("yes we gucci");
     var url_string = window.location.href;
     var url = new URL(url_string);
 
@@ -78,11 +79,6 @@ async function fetchJson() {
                     //btn.innerHTML = "like/dislike";
                     for(el of user_likes)
                     {
-                        // console.log(el.User);
-                        // console.log("el.Type: "+ el.Type);
-                        // console.log("type: " + type);
-                        // console.log("ElementId " + el.ElementId);
-                        // console.log("k: " + k);
                         if (el.Type == type && el.ElementId == k)
                         {
                             
@@ -145,7 +141,7 @@ async function fetchJson() {
      query_string = ("question/similar-questions/" + QID).toString();
      await fetch(query_string).then(function(response) {
         response.json().then(function(text) {
-            let ID_COUNTER = 1;
+            let ID_COUNTER = -1;
             for (const [key, val] of Object.entries(text)) {
               const qid = key.substring(0, key.length - 1);
               let question = document.getElementById(ID_COUNTER.toString());
@@ -162,12 +158,13 @@ async function fetchJson() {
                 question.href = "question/" + qid;
               }
     
-              ID_COUNTER++;
+              ID_COUNTER--;
             }
         })
      });
 
     first_load = true;
+    console.log("now we here");
 }
 
 function getUserLikes() {
@@ -181,8 +178,6 @@ function getUserLikes() {
             {
                 if (el.User == localStorage.getItem('token'))
                 {
-                    //console.log(el.User);
-                    //console.log(el.Type);
                     new_text.push(el);
                 }
             }
@@ -192,7 +187,7 @@ function getUserLikes() {
 }
 
 function submitAnswer() {
-
+    console.log("submit");
 
     const loggerUser = localStorage.getItem('token');
     if (!loggerUser)
