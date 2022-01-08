@@ -6,6 +6,7 @@ const w2v = require('word2vec');
 
 const path = require('path');
 const model = require('word2vec/lib/model');
+const res = require('express/lib/response');
 
 
 function preprocess(originalString) {
@@ -67,7 +68,10 @@ function createEmbeddings(inputFile, w2v_model, outputFile) {
         const dimensions = parseInt(w2v_model.size);
 
         const doc_embeddings = [];
+        const totalLength = Object.entries(json_data).length;
+        let progressCtr = 0;
         for (const [key, val] of Object.entries(json_data)) {
+            console.log(progressCtr.toString() + " / " + totalLength.toString());
             let res_arr = preprocess(val["Body"]);
             res_arr = res_arr.split(" ");
             res_arr = [...new Set(res_arr)];
@@ -94,6 +98,7 @@ function createEmbeddings(inputFile, w2v_model, outputFile) {
                 doc_vector[i] /= nr_elements;
             }
             doc_embeddings.push([key, doc_vector]);
+            progressCtr++;
         }
         stream.write(doc_embeddings.length + " " + dimensions + "\n");
         doc_embeddings.forEach(obj => {
@@ -108,15 +113,32 @@ function createEmbeddings(inputFile, w2v_model, outputFile) {
 // - create a corpus
 // - build w2v model (i.e., word vectors)
 // - create document embeddings
-
 createCorpus("data/Answers.json", 'data/corpus.txt');
-w2v.word2vec("information_retrieval/data/corpus.txt",
- "information_retrieval/data/word_vectors.txt",
- );
 
-w2v.loadModel("information_retrieval/data/word_vectors.txt", function( error, model ) {
-    /*     createEmbeddings("data/Answers.json", model, 
-    "data/answer_entities.txt"); */
-    createEmbeddings("data/Questions.json", model, 
-    "data/question_entities.txt");
+let readyToLoad = false;
+
+w2v.word2vec(
+    "information_retrieval/data/corpus.txt",
+    "information_retrieval/data/word_vectors.txt", 
+    {}, 
+    // callback function to save resulting model to file
+    function() {
+        console.log("done training model");
+        readyToLoad = true;
 });
+
+// wait until the above calculations are done...
+function wait(){
+    if (readyToLoad == false){
+      setTimeout(wait,100);
+    } else {
+        w2v.loadModel("information_retrieval/data/word_vectors.txt", function( error, model ) {
+            console.log("creating embeddings");
+            createEmbeddings("data/Questions.json", model, 
+            "data/entities.txt");
+            console.log("all done now");
+        });
+    }
+}
+wait();
+

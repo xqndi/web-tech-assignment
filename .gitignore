@@ -3,3 +3,5 @@ information_retrieval/data/Answers.csv
 information_retrieval/data/Answers.json
 information_retrieval/data/dummy_Questions.json
 information_retrieval/data/Questions.csv
+information_retrieval/data/answer_entities.txt
+information_retrieval/data/corpus.txt

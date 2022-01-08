@@ -23,22 +23,23 @@ const ANSWER = "ANSWER";
 // doc model for document embeddings
 let wordModel, docModel;
 
-// TODO need good way to load model!!
-// here, it could be that the model still loads 
-// when we already want to use it!!
+
+// TODO idk if we wanna do it like this (nested callbacks)
+console.log("loading models");
 w2v.loadModel("information_retrieval/data/word_vectors.txt", function( error, model ) {
   wordModel = model;
-});
-w2v.loadModel("information_retrieval/data/question_entities.txt", function( error, model ) {
-  docModel = model;
+  console.log("done loading word model");
+  w2v.loadModel("information_retrieval/data/entities.txt", function( error, model ) {
+    docModel = model;
+    console.log("done loading document model");
+    app.listen(port, () => {
+      console.log(`Example app listening at http://localhost:${port}`);
+    });
+  });
 });
 
 // Part 1
 // For part one, we just serve the static files and a dummy endpoint to fetch data
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-});
 
 app.use(express.static('static'));
 
@@ -67,7 +68,11 @@ app.get('/', (req, res) => {
 app.post('/index-search', textParser, (req, res) => {
   // todo title and NOT body
   const questionRanking = rankQuestions(req.body);
-  res.send(questionRanking);
+  if (questionRanking == -1) {
+    res.send("-1");
+  } else {
+    res.send(questionRanking);
+  }
 });
 
 app.post('/like-by-id', textParser, (req, res) => {
@@ -177,6 +182,10 @@ app.get('/question/similar-questions/:qid', textParser, (req, res) => {
 
   const currentQuestionVector = docModel.getVector(questionID.toString());
   const ranking = doSimilaritySearch(currentQuestionVector);
+  if (ranking == "-1") {
+    res.send("-1");
+    return;
+  }
 
   // the question itself is of course most similar to itself
   // but we don't want to recommend the same question again
@@ -250,12 +259,11 @@ app.post('/question/submit-question', jsonParser, function (request, response) {
     JSON.stringify(allQuestionsJson));
 
   let fileData = fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/question_entities.txt"),
+    "information_retrieval/data/entities.txt"),
     {encoding: 'utf8', flag: 'r'}
     );
   let fileLines = fileData.split("\n");
   let nrLines = parseInt(fileLines[0].split(" ")[0]) + 1;
-  console.log(nrLines);
   fileData = fileData.replace(/.+(?= )/, nrLines.toString());
 
   fileData += 
@@ -264,11 +272,11 @@ app.post('/question/submit-question', jsonParser, function (request, response) {
     "\n";
     
   fs.writeFileSync(path.resolve(__dirname,
-    "information_retrieval/data/question_entities.txt"),
+    "information_retrieval/data/entities.txt"),
     fileData);
 
   // TODO this seems very stupid
-  w2v.loadModel("information_retrieval/data/question_entities.txt", function( error, model ) {
+  w2v.loadModel("information_retrieval/data/entities.txt", function( error, model ) {
     docModel = model;
     // TODO what to send
     response.send(generatedKey);
@@ -284,15 +292,7 @@ app.get('/popular-articles', (req, res) => {
 
   var ranked_articles = rankArticles(data);
 
-  //console.log(JSON.stringify(ranked_articles.map(Title => Title.Title)));
-
-  //console.log(JSON.stringify(ranked_articles));
-
   res.send(JSON.stringify(ranked_articles));
-
-  // res.send(ranked_articles.map(Title =>
-  //   `<a href="http://localhost:3000/redirect_to_question.html">${Title.Title}</a><br>`).join(''));
-
 })
 
 app.get('/:uid/question/:qid', (req, res) => {
@@ -497,6 +497,9 @@ function createW2vForNewQuestion(q) {
 }
 
 function doSimilaritySearch(doc_vector) {
+  if (doc_vector == null) {
+    return -1;
+  }
   // now rank documents against our new query-vector
   const nearestVectors = docModel.getNearestWords(doc_vector, 10)
 

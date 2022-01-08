@@ -14,6 +14,11 @@ function processQuery() {
         body: q.value
     }).then(function(response) {
       response.json().then(function(text) {
+        // couldn't find embedding for query / question
+        if (text == "-1") {
+          window.alert("Please reformulate your question");
+          return;
+        }
         const article = document.getElementById("similar-questions-article");
         document.getElementById("similar-questions-header").style.display = "Block";
         for (const [key, val] of Object.entries(text)) {
