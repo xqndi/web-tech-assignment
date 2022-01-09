@@ -2,6 +2,18 @@ function createNewQuestion() {
     const loggedUser = localStorage.getItem('token');
     if (!loggedUser)
     {
+        var title_field = document.getElementById("title-input");
+        var q_body_field = document.getElementById("q-body-input");
+        title_field.style.color = "red";
+        q_body_field.style.color = "red";
+        title_field.value = "";
+        title_field.placeholder = "";
+        title_field.placeholder = "log in before posting a question!";
+        q_body_field.value = "";
+        q_body_field.placeholder = "";
+        q_body_field.placeholder = "log in before posting a question!";
+        var button = document.getElementById("question_ASK");
+        button.style.display= "none";
         return false;
     }
     

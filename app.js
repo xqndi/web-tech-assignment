@@ -23,7 +23,7 @@ const ANSWER = "ANSWER";
 // doc model for document embeddings
 let wordModel, docModel;
 
-
+deleteloggedInUsers();
 // TODO idk if we wanna do it like this (nested callbacks)
 console.log("loading models");
 w2v.loadModel("information_retrieval/data/word_vectors.txt", function( error, model ) {
@@ -43,7 +43,7 @@ w2v.loadModel("information_retrieval/data/word_vectors.txt", function( error, mo
 
 app.use(express.static('static'));
 
-deleteloggedInUsers();
+
 
 function deleteloggedInUsers() {
 
@@ -62,7 +62,7 @@ app.get('/login/user/auth', (req, res) => {
 })
 
 app.get('/', (req, res) => {
-  res.sendFile('static/index.html');
+  res.status(200).sendFile('static/index.html');
 });
 
 app.post('/index-search', textParser, (req, res) => {
@@ -163,10 +163,10 @@ app.post('/like-by-id', textParser, (req, res) => {
       JSON.stringify(fileDataJson));
   }
   if (disliked_flag) {
-    res.send("disliked");
+    res.status(200).send("disliked");
   }
   else {
-    res.send("liked");
+    res.status(200).send("liked");
   }
 
   
@@ -183,6 +183,7 @@ app.get('/question/similar-questions/:qid', textParser, (req, res) => {
   const currentQuestionVector = docModel.getVector(questionID.toString());
   const ranking = doSimilaritySearch(currentQuestionVector);
   if (ranking == "-1") {
+    //not sure what exactly the problem here is
     res.send("-1");
     return;
   }
@@ -191,18 +192,18 @@ app.get('/question/similar-questions/:qid', textParser, (req, res) => {
   // but we don't want to recommend the same question again
   // that's why we remove it from here
   delete ranking[questionID.toString() + "f"]
-  res.send(ranking);
+  res.status(200).send(ranking);
 });
 
 // TODO right path
 // TODO change to <POST/GET>
 app.get('/new', (req, res) => {
-  res.sendFile(__dirname + '/static/new.html');
+  res.status(200).sendFile(__dirname + '/static/new.html');
 });
 
 // TODO right path
 app.get('/about', (req, res) => {
-  res.sendFile(__dirname + '/static/about.html');
+  res.status(200).sendFile(__dirname + '/static/about.html');
 });
 
 app.post('/question/submit-answer', jsonParser, function (request, response) {
@@ -221,7 +222,7 @@ app.post('/question/submit-answer', jsonParser, function (request, response) {
     JSON.stringify(AllAnswersJson));
 
   // TODO what to send
-  response.send("all good (?)");
+  response.status(200).send("OK");
 });
 
 app.get('/question/get-user-likes', jsonParser, function(request, response) {
@@ -241,7 +242,7 @@ app.post('/question/submit-question', jsonParser, function (request, response) {
   const qVector = createW2vForNewQuestion(newObj["Body"]);
   // TODO good handling
   if (!qVector) {
-    response.send("-1");
+    response.status(501).send("-1");
     return;
   }
 
@@ -279,7 +280,7 @@ app.post('/question/submit-question', jsonParser, function (request, response) {
   w2v.loadModel("information_retrieval/data/entities.txt", function( error, model ) {
     docModel = model;
     // TODO what to send
-    response.send(generatedKey);
+    response.status(201).send(generatedKey);
     return;
   });
 });
@@ -292,14 +293,11 @@ app.get('/popular-articles', (req, res) => {
 
   var ranked_articles = rankArticles(data);
 
-  res.send(JSON.stringify(ranked_articles));
+  res.status(200).send(JSON.stringify(ranked_articles));
 })
 
-app.get('/:uid/question/:qid', (req, res) => {
-  res.sendFile(__dirname + "/static/question.html");
-})
 app.get('/question/:qid', (req, res) => {
-  res.sendFile(__dirname + "/static/question.html");
+  res.status(200).sendFile(__dirname + "/static/question.html");
 })
 
 
@@ -351,7 +349,7 @@ app.get('/sim/:qid', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  res.sendFile(__dirname + '/static/register.html')
+  res.status(200).sendFile(__dirname + '/static/register.html')
 })
 
 app.post('/register/new-user', jsonParser, function (request, response) {
@@ -365,12 +363,12 @@ app.post('/register/new-user', jsonParser, function (request, response) {
   {
     if (el.UserEmail == newObj.UserEmail)
     {
-      response.send("there is already an account registered with this email!");
+      response.status(406).send("there is already an account registered with this email!");
       return;
     }
     if(el.UserName == newObj.UserName)
     {
-      response.send("username already taken!")
+      response.status(406).send("username already taken!")
       return;
     }
   }
@@ -381,13 +379,13 @@ app.post('/register/new-user', jsonParser, function (request, response) {
     "information_retrieval/data/Users.json"),
     JSON.stringify(AllUsersJson));
   
-  response.send("new user registered successfully!");
+  response.status(201).send("new user registered successfully!");
 });
 
 
 
 app.get('/login', (req, res) => {
-  res.sendFile(__dirname + '/static/login.html');
+  res.status(200).sendFile(__dirname + '/static/login.html');
 })
 
 app.post('/login/user', jsonParser, function (request, response) {
@@ -408,12 +406,12 @@ app.post('/login/user', jsonParser, function (request, response) {
       fs.writeFileSync(path.resolve(__dirname,
         "information_retrieval/data/loggedInUsers.json"),
         JSON.stringify(LoggedInUsers));
-      response.send("Successfully logged in!");
+      response.status(200).send("Successfully logged in!");
       return;
     }
   }
   
-  response.send("Wrong password or username!");
+  response.status(400).send("Wrong password or username!");
 });
 
 
@@ -421,7 +419,7 @@ app.post('/login/user', jsonParser, function (request, response) {
 // TODO which way
 app.get("/*", function (req, res, next) {
   // res.status(404).send('The requested resource/page was not found');
-  res.sendFile(__dirname + '/static/404.html');
+  res.status(404).sendFile(__dirname + '/static/404.html');
 })
 
 function rankArticles(inputFile) {

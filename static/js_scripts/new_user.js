@@ -19,7 +19,6 @@ function createNewUser()
 
     if (password.value != password_check.value)
     {
-         //flo replace h1 with something red
         hideChildren()
         document.body.appendChild(failed_pass);
         return;

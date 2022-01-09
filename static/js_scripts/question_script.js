@@ -194,7 +194,9 @@ function submitAnswer() {
     {
         var input_field = document.getElementById("add-answer")
         input_field.style.color = "red";
-        input_field.value = "Log in before posting an answer!";
+        input_field.value = "";
+        input_field.placeholder = "";
+        input_field.placeholder = "Log in before posting an answer!";
         return false;
     }
 

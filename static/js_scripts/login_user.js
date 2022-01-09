@@ -63,15 +63,10 @@ function loggoutUsers() {
     }).then(function(response) {
         response.json().then(function(text) {
         
-            console.log(Object.entries(text));
             for(var el of text)
             {   
-                console.log("fileusername: " + el.UserName);
-                console.log("localStorage: "+ localStorage.getItem('token'));
                 if(el.UserName == localStorage.getItem('token'))
                 {
-                    console.log("fileusername: " + el.UserName);
-                    console.log("localStorage: "+ localStorage.getItem('token'));
                     return;
                 }
             }   
