@@ -58,7 +58,7 @@ app.get('/login/user/auth', (req, res) => {
   let LoggedInUsers = JSON.parse(fs.readFileSync(path.resolve(__dirname,
     "information_retrieval/data/loggedInUsers.json")));
 
-  res.send(JSON.stringify(Object.values(LoggedInUsers)));
+  res.status(200).send(JSON.stringify(Object.values(LoggedInUsers)));
 })
 
 app.get('/', (req, res) => {
@@ -69,9 +69,9 @@ app.post('/index-search', textParser, (req, res) => {
   // todo title and NOT body
   const questionRanking = rankQuestions(req.body);
   if (questionRanking == -1) {
-    res.send("-1");
+    res.status(406).send("-1");
   } else {
-    res.send(questionRanking);
+    res.status(200).send(questionRanking);
   }
 });
 
@@ -184,7 +184,7 @@ app.get('/question/similar-questions/:qid', textParser, (req, res) => {
   const ranking = doSimilaritySearch(currentQuestionVector);
   if (ranking == "-1") {
     //not sure what exactly the problem here is
-    res.send("-1");
+    res.status(406).send("-1");
     return;
   }
 
@@ -231,7 +231,7 @@ app.get('/question/get-user-likes', jsonParser, function(request, response) {
     "information_retrieval/data/User_likes.json"
     )));
 
-  response.send(JSON.stringify(Object.values(user_likes_json)));
+  response.status(200).send(JSON.stringify(Object.values(user_likes_json)));
 
 })
 
@@ -341,11 +341,11 @@ app.get('/q/:qid', (req, res) => {
 // We create embeddings of the query and use it for a similarity search on the pretrained document embeddings
 
 app.get('/search', (req, res) => {
-  res.send('API for ' + req.query["query"]);
+  res.status(200).send('API for ' + req.query["query"]);
 });
 
 app.get('/sim/:qid', (req, res) => {
-  res.send('API for ' + req.params.qid);
+  res.status(200).send('API for ' + req.params.qid);
 });
 
 app.get('/register', (req, res) => {
