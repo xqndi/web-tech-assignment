@@ -37,6 +37,14 @@ function createNewUser()
             body: JSON.stringify(newUserJson)
     }).then(function(response) {
         response.text().then(function(text) {
+            if (text == "-1")
+            {
+                return;
+            }
+            else if (text == "Internal Server Error")
+            {
+                return;
+            }
             hideChildren()
             success.innerText = text;
             document.body.appendChild(success);

@@ -55,6 +55,10 @@ function createNewQuestion() {
         body: JSON.stringify(newQuestionJson)
     }).then(function(response) {
         response.text().then(function(text) {
+            if (text == "Internal Server Error")
+            {
+                return;
+            }
             if (text == "-1") {
                 // here it was not possibly to create 
                 // a vector representation for the question-body

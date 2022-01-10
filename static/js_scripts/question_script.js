@@ -172,6 +172,11 @@ function getUserLikes() {
         method: "GET"
     }).then(function(response) {
         response.json().then(function(text) {
+            if (text == "Internal Server Error")
+            {
+                user_likes = [];
+                return;
+            }
             new_text = [];
             getUserLikes = [];
             for (var el of text)
@@ -192,7 +197,7 @@ function submitAnswer() {
     const loggerUser = localStorage.getItem('token');
     if (!loggerUser)
     {
-        var input_field = document.getElementById("add-answer")
+        var input_field = document.getElementById("add-answer");
         input_field.style.color = "red";
         input_field.value = "";
         input_field.placeholder = "";
@@ -226,6 +231,18 @@ function submitAnswer() {
             'Content-Type': 'application/json'},
         body: JSON.stringify(newAnswerJson)
     }).then(function(response) {
+        if (response == "request-body is empty")
+        {
+            var input_field = document.getElementById("add-answer");
+            input_field.placeholder = "";
+            input_field.placeholder = "Answer must be atleast one word!";
+            return false;
+        }
+        else if (response == "Internal Server Error")
+        {
+            return false;
+        }
+        
         console.log("done");
         document.location.reload();
     });
@@ -249,7 +266,16 @@ function likeElementById(btn) {
         body: btn.value
     }).then(function(response) {
         response.text().then(function(text) {
-            if (text == "liked") {
+            if (text == "Internal Server Error")
+            {
+                return;
+            }
+            else if (text == "invalid type")
+            {
+                console.log(text);
+                return;
+            }
+            else if (text == "liked") {
                 console.log("hi");
                 //btn.style.background = "#00FF00";
                 //btn.innerHTML = "LIKED :)";

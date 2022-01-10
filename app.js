@@ -9,7 +9,6 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const w2v = require('word2vec');
 const res = require('express/lib/response');
-const uuidv4 = require("uuid/v4");
 const { resolve } = require('path');
 
 const textParser = bodyParser.text();
@@ -55,10 +54,18 @@ function deleteloggedInUsers() {
 }
 
 app.get('/login/user/auth', (req, res) => {
-  let LoggedInUsers = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/loggedInUsers.json")));
-
-  res.status(200).send(JSON.stringify(Object.values(LoggedInUsers)));
+  try
+  {
+    let LoggedInUsers = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+      "information_retrieval/data/loggedInUsers.json")));
+  
+    res.status(200).send(JSON.stringify(Object.values(LoggedInUsers)));
+  }
+  catch
+  {
+    res.status(500).send(JSON.stringify("Internal Server Error"));
+  }
+  
 })
 
 app.get('/', (req, res) => {
@@ -88,24 +95,33 @@ app.post('/like-by-id', textParser, (req, res) => {
   }
 
 
-
-  let likeUserJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/User_likes.json"
-    )));
+  var likeUserJson = {};
+  try
+  {
+    likeUserJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+      "information_retrieval/data/User_likes.json"
+      )));
+  }
+  catch
+  {
+    res.status(500).send("Internal Server Error");
+    return;
+  }
+  
   
   var disliked_flag = false;
   var id_of_json_el_to_delete = 0;
+  var last_id = 0;
 
   for (var el of Object.keys(likeUserJson))
   {
-
+    last_id = el;
     if((likeUserJson[el].User == username) && (likeUserJson[el].Type == type) && (likeUserJson[el].ElementId == id))
     {
       id_of_json_el_to_delete = el
       disliked_flag = true;
     }
   }
-
 
   
   if (!disliked_flag) {
@@ -115,33 +131,73 @@ app.post('/like-by-id', textParser, (req, res) => {
     newUserlikeJson["ElementId"] = id;
 
     
+    var unique_key = last_id + 1;
+    while(Object.keys(likeUserJson).includes(unique_key))
+    {
+      unique_key++;
+    }
+    likeUserJson[unique_key] = newUserlikeJson;
 
-    likeUserJson[uuidv4()] = newUserlikeJson;
-
-    fs.writeFileSync(path.resolve(__dirname,
-      "information_retrieval/data/User_likes.json"),
-      JSON.stringify(likeUserJson));
+    try
+    {
+      fs.writeFileSync(path.resolve(__dirname,
+        "information_retrieval/data/User_likes.json"),
+        JSON.stringify(likeUserJson));
+    }
+    catch
+    {
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    
   }
   else
   {
     delete likeUserJson[id_of_json_el_to_delete];
 
-    fs.writeFileSync(path.resolve(__dirname,
-      "information_retrieval/data/User_likes.json"),
-      JSON.stringify(likeUserJson));
+    try
+    {
+      fs.writeFileSync(path.resolve(__dirname,
+        "information_retrieval/data/User_likes.json"),
+        JSON.stringify(likeUserJson));
+    }
+    catch
+    {
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    
   }
 
 
   let fileDataJson;
   if (type === QUESTION) {
-    fileDataJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-      "information_retrieval/data/Questions.json"
-      )));
+    try
+    {
+      fileDataJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+        "information_retrieval/data/Questions.json"
+        )));
+    }
+    catch
+    {
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    
   } else if (type === ANSWER) {
-    fileDataJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-      "information_retrieval/data/Answers.json"
-      )));
-  } else { res.status(400).send("invalid type?"); return; }
+    try
+    {
+      fileDataJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+        "information_retrieval/data/Answers.json"
+        )));
+    }
+    catch
+    {
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+    
+  } else { res.status(400).send("invalid type"); return; }
 
 
   if (!disliked_flag) {
@@ -154,22 +210,36 @@ app.post('/like-by-id', textParser, (req, res) => {
   
 
   if (type === QUESTION) {
-    fs.writeFileSync(path.resolve(__dirname,
-      "information_retrieval/data/Questions.json"),
-      JSON.stringify(fileDataJson));
+    try
+    {
+      fs.writeFileSync(path.resolve(__dirname,
+        "information_retrieval/data/Questions.json"),
+        JSON.stringify(fileDataJson));
+    }
+    catch
+    {
+      res.status(500).send("Internal Server Error");
+      return;
+    }
   } else if (type === ANSWER) {
-    fs.writeFileSync(path.resolve(__dirname,
-      "information_retrieval/data/Answers.json"),
-      JSON.stringify(fileDataJson));
+    try
+    {
+      fs.writeFileSync(path.resolve(__dirname,
+        "information_retrieval/data/Answers.json"),
+        JSON.stringify(fileDataJson));
+    }
+    catch
+    {
+      res.status(500).send("Internal Server Error");
+      return;
+    }
   }
   if (disliked_flag) {
     res.status(200).send("disliked");
   }
   else {
     res.status(200).send("liked");
-  }
-
-  
+  }  
 });
 
 app.get('/question/similar-questions/:qid', textParser, (req, res) => {
@@ -209,17 +279,47 @@ app.get('/about', (req, res) => {
 app.post('/question/submit-answer', jsonParser, function (request, response) {
   const newObj = request.body;
 
+  if(!newObj)
+  {
+    response.status(400).send("request-body is empty");
+    return;
+  }
   // TODO parse json-files once and not all the time...
-  let AllAnswersJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Answers.json"
-    )));
+  let AllAnswersJson;
+  try
+  {
+    AllAnswersJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+      "information_retrieval/data/Answers.json"
+      )));
+  }
+  catch
+  {
+    response.status(500).send("Internal Server Error");
+    return;
+  }
+  
 
   // generate (unique) key for new Answers / Questions
-  AllAnswersJson[uuidv4()] = newObj;
+  var unique_key = (Object.keys(AllAnswersJson).sort().pop() + 1);
+  while(Object.keys(AllAnswersJson).includes(unique_key))
+  {
+    unique_key++;
+  }
+  AllAnswersJson[unique_key] = newObj;
 
-  fs.writeFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Answers.json"),
-    JSON.stringify(AllAnswersJson));
+  try
+  {
+    fs.writeFileSync(path.resolve(__dirname,
+      "information_retrieval/data/Answers.json"),
+      JSON.stringify(AllAnswersJson));
+
+  }
+  catch
+  {
+    response.status(500).send("Internal Server Error");
+    return;
+  }
+  
 
   // TODO what to send
   response.status(200).send("OK");
@@ -227,9 +327,19 @@ app.post('/question/submit-answer', jsonParser, function (request, response) {
 
 app.get('/question/get-user-likes', jsonParser, function(request, response) {
 
-  let user_likes_json = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/User_likes.json"
-    )));
+  let user_likes_json;
+  try
+  {
+    user_likes_json = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+      "information_retrieval/data/User_likes.json"
+      )));
+  }
+  catch
+  {
+    res.status(500).send("Internal Server Error");
+    return;
+  }
+  
 
   response.status(200).send(JSON.stringify(Object.values(user_likes_json)));
 
@@ -247,51 +357,104 @@ app.post('/question/submit-question', jsonParser, function (request, response) {
   }
 
   // TODO parse json-files once and not all the time...
-  let allQuestionsJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Questions.json"
-    )));
+  let allQuestionsJson;
+  try
+  {
+    allQuestionsJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+      "information_retrieval/data/Questions.json"
+      )));
+  }
+  catch
+  {
+    response.status(500).send("Internal Server Error");
+    return;
+  }
+  
 
-  const generatedKey = uuidv4();
-  // generate (unique) key for new Answers / Questions
-  allQuestionsJson[generatedKey] = newObj;
+  var unique_key = (Object.keys(allQuestionsJson).sort().pop() + 1);
+  while(Object.keys(allQuestionsJson).includes(unique_key))
+  {
+    unique_key++;
+  }
+  allQuestionsJson[unique_key] = newObj;
 
-  fs.writeFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Questions.json"),
-    JSON.stringify(allQuestionsJson));
 
-  let fileData = fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/entities.txt"),
-    {encoding: 'utf8', flag: 'r'}
-    );
+  try
+  {
+    fs.writeFileSync(path.resolve(__dirname,
+      "information_retrieval/data/Questions.json"),
+      JSON.stringify(allQuestionsJson));
+  }
+  catch
+  {
+    response.status(500).send("Internal Server Error");
+    return;
+  }
+  
+  
+  let fileData;
+  try
+  {
+    fileData = fs.readFileSync(path.resolve(__dirname,
+      "information_retrieval/data/entities.txt"),
+      {encoding: 'utf8', flag: 'r'}
+      );
+  }
+  catch
+  {
+    response.status(500).send("Internal Server Error");
+    return;
+  }
+  
   let fileLines = fileData.split("\n");
   let nrLines = parseInt(fileLines[0].split(" ")[0]) + 1;
   fileData = fileData.replace(/.+(?= )/, nrLines.toString());
 
   fileData += 
-    generatedKey.toString() + " " + 
+    unique_key.toString() + " " + 
     qVector.toString().replace(/,/g, " ") +
     "\n";
     
-  fs.writeFileSync(path.resolve(__dirname,
-    "information_retrieval/data/entities.txt"),
-    fileData);
-
-  // TODO this seems very stupid
-  w2v.loadModel("information_retrieval/data/entities.txt", function( error, model ) {
-    docModel = model;
-    // TODO what to send
-    response.status(201).send(generatedKey);
+  try
+  {
+    fs.writeFileSync(path.resolve(__dirname,
+      "information_retrieval/data/entities.txt"),
+      fileData);
+  
+    // TODO this seems very stupid
+    w2v.loadModel("information_retrieval/data/entities.txt", function( error, model ) {
+      docModel = model;
+      // TODO what to send
+      response.status(201).send(unique_key);
+      return;
+    });
+  }
+  catch
+  {
+    response.status(500).send("Internal Server Error");
     return;
-  });
+  }
+  
 });
 
 
-const data = require(path.resolve(
-  __dirname, 'information_retrieval/data/Questions.json'));
+
 
 app.get('/popular-articles', (req, res) => {
 
-  var ranked_articles = rankArticles(data);
+  var popularQuestions;
+  try
+  {
+    popularQuestions = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+        "information_retrieval/data/Questions.json")));
+  }
+  catch
+  {
+    res.status(500).send("Internal Server Error");
+    return;
+  }
+  
+  var ranked_articles = rankArticles(popularQuestions);
 
   res.status(200).send(JSON.stringify(ranked_articles));
 })
@@ -312,15 +475,26 @@ app.get('/q/:qid', (req, res) => {
     res.send("invalid question-id!");
     return;
   }
+  var questionsJson;
+  var answersJson;
+  try
+  {
+    questionsJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+      "information_retrieval/data/Questions.json"
+      )));
 
-  const questionsJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Questions.json"
-    )));
+    answersJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+      "information_retrieval/data/Answers.json"
+      )));
+  }
+  catch
+  {
+    res.status(500).send("Internal Server Error");
+    return;
+  }
+  
 
-
-  const answersJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Answers.json"
-    )));
+  
 
     const jsonRes = {};
 
@@ -334,6 +508,7 @@ app.get('/q/:qid', (req, res) => {
         jsonRes[[key]] = val;
       }
     }
+    res.status(200);
     res.json(jsonRes);
 });
 
@@ -354,13 +529,29 @@ app.get('/register', (req, res) => {
 
 app.post('/register/new-user', jsonParser, function (request, response) {
   const newObj = request.body;
+  if (!newObj)
+  {
+    response.status(400).send("-1");
+  }
 
-  let AllUsersJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Users.json")));
+  let AllUsersJson;
+  try
+  {
+    AllUsersJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+      "information_retrieval/data/Users.json")));
+  }
+  catch
+  {
+    response.status(500).send("Internal Server Error");
+    return;
+  }
+  
 
   var searchlist = Object.values(AllUsersJson);
+  var last_id = 0;
   for(var el of searchlist)
   {
+    last_id++;
     if (el.UserEmail == newObj.UserEmail)
     {
       response.status(406).send("there is already an account registered with this email!");
@@ -373,12 +564,25 @@ app.post('/register/new-user', jsonParser, function (request, response) {
     }
   }
 
-  AllUsersJson[uuidv4()] = newObj;
+  var unique_key = last_id + 1;
+  while(Object.keys(AllUsersJson).includes(unique_key))
+  {
+    unique_key++;
+  }
 
-  fs.writeFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Users.json"),
-    JSON.stringify(AllUsersJson));
-  
+  AllUsersJson[unique_key] = newObj;
+  try
+  {
+    fs.writeFileSync(path.resolve(__dirname,
+      "information_retrieval/data/Users.json"),
+      JSON.stringify(AllUsersJson));
+  }
+  catch
+  {
+    response.status(500).send("Internal Server Error");
+    return;
+  }
+
   response.status(201).send("new user registered successfully!");
 });
 
@@ -390,22 +594,51 @@ app.get('/login', (req, res) => {
 
 app.post('/login/user', jsonParser, function (request, response) {
   const newObj = request.body;
+  
+  if (!newObj)
+  {
+    response.status(400).send("fields must be filled out!");
+  }
+  var AllUsersJson;
+  var LoggedInUsers;
+  try
+  {
+    AllUsersJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+      "information_retrieval/data/Users.json")));
 
-  let AllUsersJson = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Users.json")));
-
-  let LoggedInUsers = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/loggedInUsers.json")));
+    LoggedInUsers = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+      "information_retrieval/data/loggedInUsers.json")));
+  }
+  catch
+  {
+    response.status(500).send("Internal Server Error");
+    return;
+  }
 
   var searchlist = Object.values(AllUsersJson);
+  
   for(var el of searchlist)
   {
     if ((el.UserName == newObj.UserName) && (el.UserPassword == el.UserPassword))
     {
-      LoggedInUsers[uuidv4()] = newObj;
-      fs.writeFileSync(path.resolve(__dirname,
-        "information_retrieval/data/loggedInUsers.json"),
-        JSON.stringify(LoggedInUsers));
+      var unique_key = (Object.keys(LoggedInUsers).sort().pop() + 1);
+      while(Object.keys(LoggedInUsers).includes(unique_key))
+      {
+        unique_key++;
+      }
+      LoggedInUsers[unique_key] = newObj;
+
+      try
+      {
+        fs.writeFileSync(path.resolve(__dirname,
+          "information_retrieval/data/loggedInUsers.json"),
+          JSON.stringify(LoggedInUsers));
+      }
+      catch
+      {
+        response.status(500).send("Internal Server Error");
+        return;
+      }
       response.status(200).send("Successfully logged in!");
       return;
     }
@@ -423,12 +656,21 @@ app.get("/*", function (req, res, next) {
 })
 
 function rankArticles(inputFile) {
-  var sorted_list = Object.entries(inputFile);
+  var sorted_list;
+  try
+  {
+    sorted_list = Object.entries(inputFile);
+  }
+  catch
+  {
+    return "-1";
+  }
+  
   var key_val_pair = [];
   
   for(const [key, val] of sorted_list)
   {
-    key_val_pair.push({Key: key, Score: val.Score, Title: val.Title});
+    key_val_pair.push({Key: key, Score: val.Score, Title: val.Title, Body: val.Body});
   }
 
   key_val_pair.sort((a, b) => (a.Score < b.Score) ? 1 : -1);
@@ -501,9 +743,18 @@ function doSimilaritySearch(doc_vector) {
   // now rank documents against our new query-vector
   const nearestVectors = docModel.getNearestWords(doc_vector, 10)
 
-  const jsonData = JSON.parse(fs.readFileSync(path.resolve(__dirname,
-    "information_retrieval/data/Questions.json"
-    )));
+  var jsonData;
+  try
+  {
+    jsonData = JSON.parse(fs.readFileSync(path.resolve(__dirname,
+      "information_retrieval/data/Questions.json"
+      )));
+  }
+  catch
+  {
+    return "-1"
+  }
+  
 
   let res = {};
   nearestVectors.forEach(jsonElement => {

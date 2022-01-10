@@ -84,11 +84,29 @@ function displayMostPopular() {
       const article = document.getElementById("popular-questions-article");
       for (const el of text)
       {
+        console.log(el);
         question = document.createElement("a");
-        question.innerText = el.Title + "\n";
+        question.innerText =  el.Title + "\n";
+
+                              
         question.href = "/question/" + el.Key;
         question.className = "questions";
+
+        question_body = document.createElement("small");
+        question_body.innerHTML = el.Body.substring(0, 100) + "..." + "\n";
+        question_body.className = "questions_body";
+
+        question_score = document.createElement("small");
+        question_score.innerText = "Score: " + el.Score;
+        question_score.className = "questions_score";
+
+        // question_frame = document.createElement("a");
+        // question_frame.className = "questions_frame"
+        // question_frame.appendChild(question);
+        // question_frame.appendChild(question_body);
         article.appendChild(question);
+        article.appendChild(question_body);
+        article.appendChild(question_score);
       }
     })
   })
