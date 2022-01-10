@@ -7,11 +7,9 @@
     font-size: 20px;
     width:150px;
     top: 3px;
-    margin: auto;
     color: black;
 
 }
-
 
 #user_id{
     font-family: Arial, sans-serif;
@@ -32,38 +30,57 @@ button#home.tabs{
     background-color: slategrey;
 }
 
+#header_search:focus{
+    outline: none;
+    border: 1px solid #00B7FF;
+}
+
 #header_search{
+    border: 1px solid lightgrey;
     background-image: url("images/Magnifying_glass.png");
     background-size:18px;
     background-repeat: no-repeat;
-    background-position: 1px 1px;
+    background-position: 2px 3px ;
     border-radius: 0 10px 10px 0;
     height: 26px;
     width: 200px;
     padding-left: 25px;
 }
 
+/** {*/
+/*    margin: 0;*/
+/*}*/
+html, body {
+    height: 100%;
+}
+.content {
+    min-height: 100%;
+    /* equal to footer height */
+    margin-bottom: -40px;
+}
+.content:after {
+    content: "";
+    display: block;
+}
+footer, .content:after {
+    height:40px;
+}
 footer {
+
     width: 100%;
-    height: 50px;
-    bottom: 0;
     color: white;
     text-align: center;
-    left: 300px;
-    z-index: 999;
-    max-height: calc(100vh + 50px);
-    position: fixed;
-
 }
+
 #aboutus{
     color: white;
     border: none;
-    width: 20%;
+    width: 30%;
+    height:40px;
     cursor: pointer;
-    z-index: 999;
     background-color: #00B7FF;
-    padding-top: 10px;
     font-size: 30px;
-    padding-bottom: 30px;
     border-radius: 20px 20px 0 0;
 }
+
+

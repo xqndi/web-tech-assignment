@@ -36,8 +36,8 @@ async function fetchJson() {
                 }
                 const date = document.createElement("h4");
                 let datename =  v["CreationDate"];
-                let test = datename.replace('T',' ').replace('Z', '');
-                date.innerHTML = "Created on: " + test;
+                let displaydate = datename.replace('T',' ').replace('Z', '');
+                date.innerHTML = "Created on: " + displaydatey;
                 date.className = "DateOfQuestionAndAnswers";
                 document.body.appendChild(date);
 

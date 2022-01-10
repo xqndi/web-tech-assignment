@@ -10,8 +10,8 @@
     height: auto;
     max-width: 400px;
     max-height: 200px;
-    position: relative;
-    left: 700px;
-    top: 30px;
+    position: absolute;
+    left: 720px;
+    /*top: 30px;*/
 }
 

@@ -22,26 +22,28 @@
 </head>
 
 <body button onload="displayMostPopular(); loggoutUsers(), changeLoggedHeader()">
-<section id="headertabs">
-  <a  href="http://localhost:3000/"><button class="tabs" id="home">Home</button></a>
-  <a  href="new"><button class="tabs" id="question">Question</button></a>
-  <a  href="login"><button class="tabs" id="login">Login</button></a>
-  <a  href="register"><button class="tabs" id="register">Register</button></a>
-  <input type="search" id="header_search" placeholder="Search...">
-</section>
-  <h1 id="WebsiteHeader">Task Web App</h1>
+<div class ="content">
+  <section id="headertabs">
+    <a  href="http://localhost:3000/"><button class="tabs" id="home">Home</button></a>
+    <a  href="new"><button class="tabs" id="question">Question</button></a>
+    <a  href="login"><button class="tabs" id="login">Login</button></a>
+    <a  href="register"><button class="tabs" id="register">Register</button></a>
+    <input type="search" id="header_search" placeholder="Search...">
+  </section>
+    <h1 id="WebsiteHeader">Task Web App</h1>
 
 
-  <div class="query-search">
-      <input type="search" id="query-search" name="q" aria-label="Search for question" placeholder="Search for an article">
-      <button id="searchbutton" onclick="processQuery()">Search</button>
-  </div>
-  <article id="similar-questions-article">
-    <h2 id="similar-questions-header">Similar questions</h2>
-  </article>
-  <article id="popular-questions-article">
-    <h2 id="popular-questions-header">Most popular questions</h2>
-  </article>
+    <div class="query-search">
+        <input type="search" id="query-search" name="q" aria-label="Search for question" placeholder="Search for an article">
+        <button id="searchbutton" onclick="processQuery()">Search</button>
+    </div>
+    <article id="similar-questions-article">
+      <h2 id="similar-questions-header">Similar questions</h2>
+    </article>
+    <article id="popular-questions-article">
+      <h2 id="popular-questions-header">Most popular questions</h2>
+    </article>
+</div>
 <footer>
     <a  href="about"><button class="footerclass" id="aboutus">About us</button></a>
 </footer>

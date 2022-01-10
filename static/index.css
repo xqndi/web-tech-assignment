@@ -7,17 +7,17 @@
     font-family: Inconsolata, sans-serif;
 }
 
+#query-search:focus {
+    outline: none;
+    border: 1px solid #00B7FF;
+}
 
-#query-searchfield{
-    background-image: url("images/Magnifying_glass.png");
-    background-size: 20px;
-    background-repeat: no-repeat;
-    background-position: 4px 4px;
-    border-radius: 8px;
-    padding-left: 30px;
-    width:187px;
-    height:30px;
-    border-color: darkgrey;
+#query-search{
+    border-radius: 5px;
+    width: 350px;
+    height: 50px;
+    border: 1px solid lightgrey;
+    font-size: 15px;
 }
 
 #searchbutton{
@@ -26,16 +26,9 @@
     width: 70px;
     font-weight: bold;
     cursor: pointer;
-    height: 30px;
+    height: 50px;
     background-color: #00B7FF;
-    border-radius: 3px;
-}
-
-#query-search-button{
-    position:absolute;
-    width:25px;
-    height:25px;
-    left:180px;
+    border-radius: 5px;
 }
 
 .questions, .similarquestionclass{
@@ -47,13 +40,9 @@
     /*list-style-type: circle;*/
 }
 
-/* #login-register{
-     background-color: #00B7FF;
-    border: none;
-    float:left;
-    outline:none;
-    cursor: pointer;
-    font-size: 20px;
-    width:150px;
-    top: 3px;
-} */
+.questions{
+    padding: 5px 5px 5px 5px;
+    background-color: #9FE3FF;
+    border-radius: 5px;
+    margin-bottom: 3px;
+}

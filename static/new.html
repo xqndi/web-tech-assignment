@@ -25,24 +25,26 @@
 </head>
 
 <body button onload="changeLoggedHeader()">
-<section id="headertabs">
-  <a  href="http://localhost:3000/"><button class="tabs" id="home">Home</button></a>
-  <a  href="new"><button class="tabs" id="question">Question</button></a>
-  <a  href="login"><button class="tabs" id="login">Login</button></a>
-  <a  href="register"><button class="tabs" id="register">Register</button></a>
-  <input type="search" id="header_search" placeholder="Search...">
-</section>
+<div class="content">
+  <section id="headertabs">
+    <a  href="http://localhost:3000/"><button class="tabs" id="home">Home</button></a>
+    <a  href="new"><button class="tabs" id="question">Question</button></a>
+    <a  href="login"><button class="tabs" id="login">Login</button></a>
+    <a  href="register"><button class="tabs" id="register">Register</button></a>
+    <input type="search" id="header_search" placeholder="Search...">
+  </section>
 
-<h1 id="new_question">Ask a new question</h1>
+  <h1 id="new_question">Ask a new question</h1>
 
-<form class="form_new_question">
-  <label for="title" class="newquestionsclass">Give your question a title:</label><br>
-  <input type="text" id="title-input" name="title" placeholder="e.g. Are rejections regions always open/closed?" ><br>
-  <label for="q-body" class="newquestionsclass">What is it you wanna know?</label><br>
-  <input type="text" id="q-body-input" name="q-body" placeholder="e.g I have wondered...">
-  <br>
-  <button id="question_ASK" onclick="createNewQuestion(); return false"><b>ASK</b></button>
-</form>
+  <form class="form_new_question">
+    <label for="title" class="newquestionsclass">Give your question a title:</label><br>
+    <input type="text" id="title-input" name="title" placeholder="e.g. Are rejections regions always open/closed?" ><br>
+    <label for="q-body" class="newquestionsclass">What is it you wanna know?</label><br>
+    <input type="text" id="q-body-input" name="q-body" placeholder="e.g I have wondered...">
+    <br>
+    <button id="question_ASK" onclick="createNewQuestion(); return false"><b>ASK</b></button>
+  </form>
+</div>
 <footer>
   <a  href="about"><button class="footerclass" id="aboutus">About us</button></a>
 </footer>
