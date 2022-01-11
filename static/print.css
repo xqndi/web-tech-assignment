@@ -1,0 +1,5 @@
+@media print {
+    #headertabs, .query-search, footer, title{
+        display: none !important;
+    }
+}
