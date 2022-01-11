@@ -4,7 +4,7 @@ like_params = [];
 let user_likes = [];
 
 async function fetchJson() {
-    console.log("yes we gucci");
+
     var url_string = window.location.href;
     var url = new URL(url_string);
 
@@ -164,7 +164,6 @@ async function fetchJson() {
      });
 
     first_load = true;
-    console.log("now we here");
 }
 
 function getUserLikes() {
@@ -242,7 +241,7 @@ function submitAnswer() {
         {
             return false;
         }
-        
+
         console.log("done");
         document.location.reload();
     });
@@ -276,7 +275,6 @@ function likeElementById(btn) {
                 return;
             }
             else if (text == "liked") {
-                console.log("hi");
                 //btn.style.background = "#00FF00";
                 //btn.innerHTML = "LIKED :)";
                 btn.innerHTML = '<img id="liked_img" src="../images/liked.png"  alt="liked"/>';

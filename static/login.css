@@ -3,6 +3,9 @@
     color: darkblue;
 }
 
+h1{
+    font-family: Inconsolata, sans-serif;
+}
 
 .loginfield{
     width: 200px;

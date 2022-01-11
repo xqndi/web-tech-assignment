@@ -97,8 +97,9 @@ function displayMostPopular() {
         question_body.className = "questions_body";
 
         question_score = document.createElement("small");
-        question_score.innerText = "Score: " + el.Score;
+        question_score.innerText = "Score" + "\n" + el.Score;
         question_score.className = "questions_score";
+
 
         // question_frame = document.createElement("a");
         // question_frame.className = "questions_frame"

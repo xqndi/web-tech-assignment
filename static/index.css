@@ -35,16 +35,6 @@
     font-family: "Arial", sans-serif;
     font-weight: bold;
     color: black;
-    text-decoration: underline;
-    list-style-position:inside;
-    display: table;
-    /*list-style-type: circle;*/
-}
-
-.questions_body
-{
-    font-family: "Arial", sans-serif;
-    color: black;
     text-decoration: none;
     list-style-position:inside;
     display: table;
@@ -55,4 +45,31 @@
     background-color: #9FE3FF;
     border-radius: 5px;
     margin-bottom: 3px;
+    left: 50px;
+    font-family: "Arial", sans-serif;
+    position: relative;
+}
+
+.questions_body
+{
+    font-family: "Arial", sans-serif;
+    color: black;
+    text-decoration: none;
+    top: -11px;
+    left: 54px;
+    padding-bottom: -30px;
+    position: relative;
+}
+
+.questions_score{
+    display: inline-block;
+    top: -69px;
+    padding: 2px;
+    font-size: 15px;
+    font-family: "Arial", sans-serif;
+    font-weight: bold;
+    border-radius: 5px;
+    position: relative;
+    text-align: center;
+    background-color: #9FE3FF;
 }
