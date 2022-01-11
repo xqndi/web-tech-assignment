@@ -25,7 +25,7 @@ function createNewQuestion() {
     const arr = url.pathname.split("/");
     UID = arr[arr.length - 1];
 
-    console.log(UID);
+
 
     const title = document.getElementById("title-input")
     const body = document.getElementById("q-body-input")
@@ -62,7 +62,6 @@ function createNewQuestion() {
             if (text == "-1") {
                 // here it was not possibly to create 
                 // a vector representation for the question-body
-                console.log("Couldn't create question");
                 window.alert("Please reformulate your question");
                 return;
             }

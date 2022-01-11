@@ -84,7 +84,6 @@ function displayMostPopular() {
       const article = document.getElementById("popular-questions-article");
       for (const el of text)
       {
-        console.log(el);
         question = document.createElement("a");
         question.innerText =  el.Title + "\n";
 

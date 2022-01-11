@@ -15,7 +15,6 @@ async function fetchJson() {
     getUserLikes();
 
     let query_string = ("q/" + QID).toString();
-    console.log(query_string);
     
     await fetch(query_string).then(function(response) {
         response.json().then(function(json) {
@@ -191,7 +190,6 @@ function getUserLikes() {
 }
 
 function submitAnswer() {
-    console.log("submit");
 
     const loggerUser = localStorage.getItem('token');
     if (!loggerUser)
@@ -241,8 +239,6 @@ function submitAnswer() {
         {
             return false;
         }
-
-        console.log("done");
         document.location.reload();
     });
 }
@@ -253,7 +249,6 @@ function likeElementById(btn) {
     // not quite sure whether this always works :)
 
     //btn.style.background = "#00FF00";
-    console.log(btn.value)
     const logged = localStorage.getItem('token');
     if (!logged)
     {
@@ -271,7 +266,6 @@ function likeElementById(btn) {
             }
             else if (text == "invalid type")
             {
-                console.log(text);
                 return;
             }
             else if (text == "liked") {
