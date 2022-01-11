@@ -18,6 +18,7 @@ function checkForLocalQuery() {
   const requestedQuery = localStorage.getItem("redirectedSearchQuery");
   if (!requestedQuery) {
     console.log("no query");
+    displayMostPopular();
     return;
   }
   localStorage.removeItem("redirectedSearchQuery");

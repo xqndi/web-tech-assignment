@@ -54,6 +54,10 @@ function hideMostPopular() {
   Array.from(headers).forEach(element => {
     element.style.display = "none";
   });
+  let preview = document.getElementById("popular-questions-article").getElementsByTagName("small");
+  Array.from(preview).forEach(element => {
+    element.style.display = "none";
+  });
 }
 
 

@@ -3,7 +3,7 @@
     color: darkblue;
 }
 
-#popular-questions-header{
+#popular-questions-header, #similar-questions-header{
     font-family: Inconsolata, sans-serif;
 }
 
@@ -38,16 +38,19 @@
     text-decoration: none;
     list-style-position:inside;
     display: table;
-}
-
-.questions{
     padding: 5px 5px 5px 5px;
     background-color: #9FE3FF;
     border-radius: 5px;
     margin-bottom: 3px;
-    left: 50px;
-    font-family: "Arial", sans-serif;
     position: relative;
+}
+
+.questions{
+    left: 50px;
+}
+
+.similarquestionclass{
+    left: 10px;
 }
 
 .questions_body
