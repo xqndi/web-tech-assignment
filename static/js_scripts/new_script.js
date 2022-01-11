@@ -66,7 +66,6 @@ function createNewQuestion() {
                 window.alert("Please reformulate your question");
                 return;
             }
-        // todo this is not speficied anywhere
         // redirct to question-page of the new question
         location.href = "/question/" + text;
         });

@@ -15,9 +15,10 @@
   <link rel="stylesheet" media="print" href="print.css">
   <script src="js_scripts/login_user.js"></script>
   <script src="js_scripts/question_script.js"></script>
+  <script src="js_scripts/search_redirect_script.js"></script>
 </head>
 
-<body onload="fetchJson(), changeLoggedHeader();">
+<body onload="fetchJson(), changeLoggedHeader(), onLoadDo()">
 <div class="content">
   <section id="headertabs">
     <a  href="http://localhost:3000/"><button class="tabs" id="home">Home</button></a>

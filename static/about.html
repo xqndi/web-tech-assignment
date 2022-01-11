@@ -13,9 +13,11 @@
   <link rel="stylesheet" href="headertabs.css">
   <link rel="stylesheet" media="print" href="print.css">
   <link rel="stylesheet" href="footer.css">
+
+  <script src="js_scripts/search_redirect_script.js"></script>
 </head>
 
-<body button onload="changeLoggedHeader()">
+<body onload="changeLoggedHeader(), onLoadDo()">
 <div class="content">
   <section id="headertabs">
     <a  href="http://localhost:3000/"><button class="tabs" id="home">Home</button></a>
