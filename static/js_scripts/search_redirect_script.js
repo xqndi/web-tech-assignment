@@ -17,12 +17,10 @@ function onLoadDo() {
 function checkForLocalQuery() {
   const requestedQuery = localStorage.getItem("redirectedSearchQuery");
   if (!requestedQuery) {
-    console.log("no query");
     displayMostPopular();
     return;
   }
   localStorage.removeItem("redirectedSearchQuery");
-  console.log(requestedQuery);
 
   const queryElement = document.getElementById("query-search");
   queryElement.value = requestedQuery;

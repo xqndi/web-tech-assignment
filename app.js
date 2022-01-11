@@ -648,12 +648,7 @@ app.post('/login/user', jsonParser, function (request, response) {
 });
 
 
-// handling of missing sites
-// TODO which way
-app.get("/*", function (req, res, next) {
-  // res.status(404).send('The requested resource/page was not found');
-  res.status(404).sendFile(__dirname + '/static/404.html');
-})
+
 
 function rankArticles(inputFile) {
   var sorted_list;
@@ -758,9 +753,16 @@ function doSimilaritySearch(doc_vector) {
 
   let res = {};
   nearestVectors.forEach(jsonElement => {
-    // this is so thrashy
     res[jsonElement["word"] + "f"] = jsonData[jsonElement["word"]]["Title"];
   });
 
   return res;
 }
+
+app.get("/404", function (req, res, next) {
+  res.status(404).sendFile(__dirname + '/static/404.html');
+});
+
+app.get("/*", function (req, res, next) {
+  res.status(404).sendFile(__dirname + '/static/error_redirect.html');
+});

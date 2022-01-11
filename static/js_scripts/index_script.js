@@ -60,7 +60,6 @@ function hideMostPopular() {
   });
 }
 
-
 function displayMostPopular() {
   document.getElementById("similar-questions-header").style.display = "None";
   document.getElementById("popular-questions-header").style.display = "Block";
@@ -103,11 +102,6 @@ function displayMostPopular() {
         question_score.innerText = "Score" + "\n" + el.Score;
         question_score.className = "questions_score";
 
-
-        // question_frame = document.createElement("a");
-        // question_frame.className = "questions_frame"
-        // question_frame.appendChild(question);
-        // question_frame.appendChild(question_body);
         article.appendChild(question);
         article.appendChild(question_body);
         article.appendChild(question_score);
